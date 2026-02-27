@@ -15,8 +15,10 @@
       "ffmpeg"
       "gh"
       "tldr"
+      "gemini-cli"
       "tcl-tk"
       "python"
+      "go"
       "tree"
     ];
 
@@ -25,9 +27,12 @@
       "hammerspoon"
       "google-chrome"
       "notion"
+      "microsoft-word"
       "inkscape"
       "obsidian"
       "codex"
+      "discord"
+      "cursor"
       "microsoft-powerpoint"
       "microsoft-word"
       "zoom"
