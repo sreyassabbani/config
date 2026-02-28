@@ -14,12 +14,27 @@
 
   programs.openclaw = {
     enable = true;
-    instances.default = { };
+    instances.default = {
+      launchd.label = "ai.openclaw.gateway";
+    };
 
     # Local gateway mode (default in nix-openclaw, set explicitly for clarity).
     config = {
+      agents.defaults = {
+        model.primary = "openai-codex/gpt-5.3-codex";
+        subagents.model.primary = "openai-codex/gpt-5.3-codex";
+      };
+
       gateway = {
         mode = "local";
+      };
+
+      tools.exec.host = "gateway";
+
+      channels.discord = {
+        enabled = true;
+        # Prefer launchd env fallback for secrets:
+        # launchctl setenv DISCORD_BOT_TOKEN "..."
       };
     };
 
