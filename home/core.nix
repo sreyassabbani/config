@@ -14,6 +14,7 @@
 
   programs.openclaw = {
     enable = true;
+    instances.default = { };
 
     # Local gateway mode (default in nix-openclaw, set explicitly for clarity).
     config = {
