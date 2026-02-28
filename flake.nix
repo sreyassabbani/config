@@ -25,6 +25,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
@@ -37,6 +42,7 @@
       username = "sreysus";
       system = "aarch64-darwin";
       vscodeExtensionsOverlay = inputs.nix-vscode-extensions.overlays.default;
+      openclawOverlay = inputs.nix-openclaw.overlays.default;
     in
     {
       ########################################
@@ -86,9 +92,17 @@
       darwinModules = {
         base = import ./darwin/base.nix { inherit self username; };
         homebrew = import ./darwin/homebrew.nix;
-        homeManager = import ./darwin/home-manager.nix { inherit username; };
+        homeManager = import ./darwin/home-manager.nix {
+          inherit username;
+          openclawHomeManagerModule = inputs.nix-openclaw.homeManagerModules.openclaw;
+        };
         nixConfig = import ./darwin/nix-config.nix;
-        overlays = import ./darwin/overlays.nix { inherit vscodeExtensionsOverlay; };
+        overlays = import ./darwin/overlays.nix {
+          inherit
+            vscodeExtensionsOverlay
+            openclawOverlay
+            ;
+        };
       };
 
       ########################################

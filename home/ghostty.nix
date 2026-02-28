@@ -16,6 +16,7 @@
       # window-padding-y = "40,0"; # if you want this later
 
       font-size = 16;
+      font-family = "GeistMono Nerd Font Mono";
 
       keybind = [
         "global:cmd+grave_accent=toggle_quick_terminal"

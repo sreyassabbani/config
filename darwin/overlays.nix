@@ -1,5 +1,11 @@
-{ vscodeExtensionsOverlay }:
+{
+  vscodeExtensionsOverlay,
+  openclawOverlay,
+}:
 { ... }:
 {
-  nixpkgs.overlays = [ vscodeExtensionsOverlay ];
+  nixpkgs.overlays = [
+    vscodeExtensionsOverlay
+    openclawOverlay
+  ];
 }

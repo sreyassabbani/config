@@ -1,4 +1,4 @@
-{ username }:
+{ username, openclawHomeManagerModule }:
 { ... }:
 {
   home-manager = {
@@ -7,7 +7,10 @@
     extraSpecialArgs = { inherit username; };
 
     users.${username} = { ... }: {
-      imports = [ ../home ];
+      imports = [
+        openclawHomeManagerModule
+        ../home
+      ];
     };
   };
 }

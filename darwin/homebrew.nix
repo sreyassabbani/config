@@ -12,6 +12,7 @@
 
     brews = [
       "mas"
+      "bat"
       "ffmpeg"
       "gh"
       "tldr"
