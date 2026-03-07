@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.ghostty = {
     enable = true;
@@ -10,6 +10,10 @@
     installBatSyntax = false;
 
     settings = {
+      command = "${pkgs.nushell}/bin/nu";
+      shell-integration = "none";
+      cursor-style = "bar";
+
       theme = "Catppuccin Frappe";
 
       window-padding-x = 30;

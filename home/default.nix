@@ -7,7 +7,7 @@
     ./git.nix
     ./helix.nix
     ./typst.nix
-    ./zsh.nix
+    ./nushell.nix
     ./vscode.nix
     ./ssh.nix
     ./ghostty.nix
