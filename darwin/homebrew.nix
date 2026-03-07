@@ -26,7 +26,6 @@
     casks = [
       "firefox"
       "hammerspoon"
-      "google-chrome"
       "notion"
       "microsoft-word"
       "inkscape"
