@@ -9,5 +9,5 @@ some fav software:
 - Ghostty
 - Helix
 - Zen
-- Zsh + OMZ
+- Nushell
 - Determinate Nix, Nix Darwin, Home Manager
