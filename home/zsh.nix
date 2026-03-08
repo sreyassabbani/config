@@ -1,4 +1,15 @@
 { config, pkgs, ... }:
+let
+  defaultFlake = builtins.readFile ./nushell/templates/default/flake.nix;
+  defaultEnvrc = builtins.readFile ./nushell/templates/default/.envrc;
+  defaultGitignore = builtins.readFile ./nushell/templates/default/.gitignore;
+  pythonFlake = builtins.readFile ./nushell/templates/python/flake.nix;
+  pythonEnvrc = builtins.readFile ./nushell/templates/python/.envrc;
+  pythonGitignore = builtins.readFile ./nushell/templates/python/.gitignore;
+  pythonPyproject = builtins.readFile ./nushell/templates/python/pyproject.toml;
+  pythonHelix = builtins.readFile ./nushell/templates/python/.helix/languages.toml;
+  pythonReadme = builtins.readFile ./nushell/templates/python/README.md;
+in
 {
   programs.zsh = {
     enable = true;
@@ -45,60 +56,58 @@
         emulate -L zsh
         setopt ERR_EXIT NO_UNSET PIPE_FAIL
 
-        if [[ -e flake.nix ]]; then
-          print -u2 "ds: flake.nix already exists here (won't overwrite)."
-          return 1
-        fi
+        local mode="''${1:-default}"
 
-        cat > flake.nix <<'EOF'
-{
-  inputs = {
-    # FlakeHub nixpkgs: "0" tracks the current stable nixpkgs channel on FlakeHub
-    nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.tar.gz";
+        case "$mode" in
+          default|dev) ;;
+          python|py) ;;
+          *)
+            print -u2 "ds: unsupported template '$mode' (try: ds or ds python)"
+            return 1
+            ;;
+        esac
 
-    flake-utils.url = "github:numtide/flake-utils";
-  };
+        case "$mode" in
+          default|dev)
+            if [[ -e flake.nix ]]; then
+              print -u2 "ds: flake.nix already exists here (won't overwrite)."
+              return 1
+            fi
+            ;;
+          python|py)
+            if [[ -e flake.nix || -e pyproject.toml || -e .helix/languages.toml ]]; then
+              print -u2 "ds: project files already exist here (won't overwrite)."
+              return 1
+            fi
+            ;;
+        esac
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-      in
-      {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            nodejs_24
-            bun
-            # pnpm
-            gemini-cli
-          ];
+        case "$mode" in
+          default|dev)
+            cat > flake.nix <<'EOF'
+${defaultFlake}EOF
+            cat > .envrc <<'EOF'
+${defaultEnvrc}EOF
+            cat > .gitignore <<'EOF'
+${defaultGitignore}EOF
+            ;;
+          python|py)
+            cat > flake.nix <<'EOF'
+${pythonFlake}EOF
+            cat > pyproject.toml <<'EOF'
+${pythonPyproject}EOF
+            cat > README.md <<'EOF'
+${pythonReadme}EOF
+            mkdir -p .helix
+            cat > .helix/languages.toml <<'EOF'
+${pythonHelix}EOF
+            cat > .envrc <<'EOF'
+${pythonEnvrc}EOF
+            cat > .gitignore <<'EOF'
+${pythonGitignore}EOF
+            ;;
+        esac
 
-          shellHook = "
-            echo \"Nix dev shell activated\"
-            echo \"Node:  $(node --version 2>/dev/null || echo 'not found')\"
-            echo \"Bun:   $(bun --version 2>/dev/null || echo 'not found')\"
-          ";
-        };
-      }
-    );
-}
-EOF
-
-        # .envrc: ensure "use flake"
-        touch .envrc
-        grep -qx 'use flake' .envrc || print 'use flake' >> .envrc
-
-        # .gitignore: ensure ".direnv"
-        touch .gitignore
-        grep -qx '\.direnv' .gitignore || print '.direnv' >> .gitignore
-
-        # activate direnv
         if (( $+commands[direnv] )); then
           direnv allow
         else
@@ -106,7 +115,7 @@ EOF
           return 1
         fi
 
-        print "ds: done ✅"
+        print "ds: $mode ready"
       }
 
       autoload -Uz edit-command-line
