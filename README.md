@@ -6,8 +6,8 @@ laptop:
 
 some fav software:
 
-- Ghostty
-- Helix
-- Zen
-- Nushell
-- Determinate Nix, Nix Darwin, Home Manager
+- [Ghostty](https://github.com/ghostty-org/ghostty)
+- [Helix](https://github.com/helix-editor/helix)
+- [Zen](https://github.com/zen-browser/desktop)
+- [Nushell](https://github.com/nushell/nushell)
+- [Determinate Nix](https://github.com/DeterminateSystems), [Nix Darwin](https://github.com/nix-darwin/nix-darwin), [Home Manager](https://github.com/nix-community/home-manager)
