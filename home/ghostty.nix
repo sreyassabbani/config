@@ -24,6 +24,7 @@
 
       keybind = [
         "global:cmd+grave_accent=toggle_quick_terminal"
+        "global:cmd+shift+grave_accent=new_window"
         "shift+enter=text:\\n"
       ];
     };
