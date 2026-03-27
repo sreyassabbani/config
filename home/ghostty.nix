@@ -23,8 +23,9 @@
       font-family = "GeistMono Nerd Font Mono";
 
       keybind = [
-        "global:cmd+grave_accent=toggle_quick_terminal"
-        "global:cmd+shift+grave_accent=new_window"
+        # Avoid cmd+backquote on macOS: it collides with system/app window cycling.
+        "global:cmd+alt+backquote=toggle_quick_terminal"
+        "global:cmd+alt+shift+backquote=new_window"
         "shift+enter=text:\\n"
       ];
     };
