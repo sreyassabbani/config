@@ -58,7 +58,10 @@
             b = ":new";
             l = "select_all";
             z = ":toggle soft-wrap.enable";
-            o = "file_picker_in_current_buffer_directory";
+            f = "file_picker_in_current_buffer_directory";
+            e = "file_explorer_in_current_buffer_directory";
+            F = "file_picker";
+            E = "file_explorer";
           };
 
           X = "select_line_above";
