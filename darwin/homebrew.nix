@@ -21,9 +21,11 @@
       "python"
       "go"
       "tree"
+      "googleworkspace-cli"
     ];
 
     casks = [
+      "gcloud-cli"
       "firefox"
       "hammerspoon"
       "notion"
