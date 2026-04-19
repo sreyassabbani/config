@@ -14,6 +14,7 @@
       "mas"
       "bat"
       "ffmpeg"
+      "poppler"
       "gh"
       "tldr"
       "gemini-cli"
@@ -26,6 +27,7 @@
 
     casks = [
       "gcloud-cli"
+      "blender"
       "firefox"
       "hammerspoon"
       "notion"
@@ -36,7 +38,6 @@
       "discord"
       "cursor"
       "microsoft-powerpoint"
-      "microsoft-word"
       "zoom"
       "skim"
       "slack"
@@ -51,7 +52,7 @@
       "visual-studio-code"
       "chatgpt-atlas"
       "the-unarchiver"
-      "zen-browser"
+      "zen"
     ];
 
     masApps = { };

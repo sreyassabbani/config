@@ -14,6 +14,7 @@
     music-cli
     # spicetify-cli
     ripgrep
+    fh
     just
     jq
     fritzing
