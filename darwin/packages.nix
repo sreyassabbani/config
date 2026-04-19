@@ -11,6 +11,7 @@
     fastfetch
     dust
     git
+    music-cli
     # spicetify-cli
     ripgrep
     just
