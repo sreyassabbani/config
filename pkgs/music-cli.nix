@@ -9,10 +9,16 @@
 let
   runtimeDeps = with python3Packages; [
     click
+    diffusers
+    scipy
     tomli
     tomli-w
+    torch
+    tqdm
+    transformers
+    yt-dlp
   ];
-  depPythonPath = lib.makeSearchPath python3.sitePackages runtimeDeps;
+  depPythonPath = python3Packages.makePythonPath runtimeDeps;
 in
 python3Packages.buildPythonApplication rec {
   pname = "music-cli";
