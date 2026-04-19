@@ -1,0 +1,85 @@
+[[snippets]]
+prefix = "class"
+body = '''
+public class ${1:Main} {
+    ${0}
+}
+'''
+description = "Java class skeleton"
+
+[[snippets]]
+prefix = "main"
+body = '''
+public class ${1:Main} {
+    public static void main(String[] args) {
+        ${0}
+    }
+}
+'''
+description = "Java main method"
+
+[[snippets]]
+prefix = "scanner"
+body = '''
+import java.util.Scanner;
+
+public class ${1:Main} {
+    public static void main(String[] args) {
+        try (Scanner ${2:scanner} = new Scanner(System.in)) {
+            ${0}
+        }
+    }
+}
+'''
+description = "Java Scanner with try-with-resources"
+
+[[snippets]]
+prefix = "scn"
+body = '''
+import java.util.Scanner;
+
+public class ${1:Main} {
+    public static void main(String[] args) {
+        try (Scanner ${2:scanner} = new Scanner(System.in)) {
+            ${0}
+        }
+    }
+}
+'''
+description = "Java Scanner with try-with-resources"
+
+[[snippets]]
+prefix = "sout"
+body = '''
+System.out.println(${1});
+'''
+description = "Print a line"
+
+[[snippets]]
+prefix = "fori"
+body = '''
+for (int ${1:i} = 0; ${1:i} < ${2:n}; ${1:i}++) {
+    ${0}
+}
+'''
+description = "Indexed for loop"
+
+[[snippets]]
+prefix = "foreach"
+body = '''
+for (${1:Type} ${2:item} : ${3:items}) {
+    ${0}
+}
+'''
+description = "Enhanced for loop"
+
+[[snippets]]
+prefix = "trycatch"
+body = '''
+try {
+    ${0}
+} catch (${1:Exception} ${2:e}) {
+    ${3:e.printStackTrace();}
+}
+'''
+description = "Try/catch block"

@@ -109,6 +109,27 @@
 
       language = [
         {
+          name = "java";
+          roots = [
+            "pom.xml"
+            "build.gradle"
+            "build.gradle.kts"
+            "settings.gradle"
+            "settings.gradle.kts"
+            ".git"
+          ];
+          "language-servers" = [
+            "jdtls"
+            "scls"
+          ];
+          formatter = {
+            command = "${pkgs.google-java-format}/bin/google-java-format";
+            args = [ "-" ];
+          };
+          auto-format = true;
+        }
+
+        {
           name = "typst";
           formatter.command = "typstyle";
           "auto-format" = true;
@@ -207,6 +228,10 @@
       ];
 
       "language-server" = {
+        jdtls = {
+          command = "${pkgs.jdt-language-server}/bin/jdtls";
+        };
+
         basedpyright = {
           command = "basedpyright-langserver";
           args = [ "--stdio" ];
@@ -220,7 +245,17 @@
         nixd = {
           command = "nixd";
         };
+
+        scls = {
+          command = "${pkgs.simple-completion-language-server}/bin/simple-completion-language-server";
+          config = {
+            feature_snippets = true;
+            snippets_first = true;
+          };
+        };
       };
     };
   };
+
+  home.file.".config/helix/snippets/java.toml".source = ./helix/snippets/java.toml;
 }
