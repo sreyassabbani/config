@@ -10,10 +10,15 @@
   homebrew = {
     enable = true;
 
+    taps = [
+      "steipete/tap"
+    ];
+
     brews = [
       "mas"
       "bat"
       "ffmpeg"
+      "spogo"
       "poppler"
       "gh"
       "tldr"
