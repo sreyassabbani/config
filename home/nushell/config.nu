@@ -5,6 +5,9 @@ source "~/Library/Application Support/nushell/lib/aliases.nu"
 source "~/Library/Application Support/nushell/lib/zoxide.nu"
 source "~/Library/Application Support/nushell/lib/ds.nu"
 
+$env.EDITOR = "hx"
+$env.VISUAL = "hx"
+
 let openclaw_gateway_token_file = ([$env.HOME ".secrets" "openclaw-gateway-token"] | path join)
 if ($openclaw_gateway_token_file | path exists) {
   $env.OPENCLAW_GATEWAY_TOKEN = (open $openclaw_gateway_token_file | str trim)

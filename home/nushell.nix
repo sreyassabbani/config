@@ -13,6 +13,8 @@
       ./nushell/templates/default/.envrc;
     "Library/Application Support/nushell/lib/templates/default/.gitignore".source =
       ./nushell/templates/default/.gitignore;
+    "Library/Application Support/nushell/lib/templates/default/AGENTS.md".source =
+      ./nushell/templates/default/AGENTS.md;
     "Library/Application Support/nushell/lib/templates/python/flake.nix".source =
       ./nushell/templates/python/flake.nix;
     "Library/Application Support/nushell/lib/templates/python/pyproject.toml".source =

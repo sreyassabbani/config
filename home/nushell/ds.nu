@@ -18,6 +18,7 @@ def --env ds [kind?: string] {
     cp ($template_dir | path join "flake.nix") ./flake.nix
     cp ($template_dir | path join ".envrc") ./.envrc
     cp ($template_dir | path join ".gitignore") ./.gitignore
+    cp ($template_dir | path join "AGENTS.md") ./AGENTS.md
   } else {
     if (("flake.nix" | path exists) or ("pyproject.toml" | path exists) or (".helix/languages.toml" | path exists)) {
       print "ds: project files already exist here (won't overwrite)."

@@ -3,6 +3,7 @@ let
   defaultFlake = builtins.readFile ./nushell/templates/default/flake.nix;
   defaultEnvrc = builtins.readFile ./nushell/templates/default/.envrc;
   defaultGitignore = builtins.readFile ./nushell/templates/default/.gitignore;
+  defaultAgents = builtins.readFile ./nushell/templates/default/AGENTS.md;
   pythonFlake = builtins.readFile ./nushell/templates/python/flake.nix;
   pythonEnvrc = builtins.readFile ./nushell/templates/python/.envrc;
   pythonGitignore = builtins.readFile ./nushell/templates/python/.gitignore;
@@ -90,6 +91,8 @@ ${defaultFlake}EOF
 ${defaultEnvrc}EOF
             cat > .gitignore <<'EOF'
 ${defaultGitignore}EOF
+            cat > AGENTS.md <<'EOF'
+${defaultAgents}EOF
             ;;
           python|py)
             cat > flake.nix <<'EOF'
