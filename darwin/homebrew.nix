@@ -11,6 +11,7 @@
     enable = true;
 
     taps = [
+      "modem-dev/tap"
       "steipete/tap"
     ];
 
@@ -28,6 +29,7 @@
       "go"
       "tree"
       "googleworkspace-cli"
+      "hunk"
     ];
 
     casks = [

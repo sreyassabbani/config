@@ -18,6 +18,7 @@
       core = {
         editor = "hx";
         autocrlf = "input";
+        pager = "hunk pager";
       };
 
       init.defaultBranch = "main";
