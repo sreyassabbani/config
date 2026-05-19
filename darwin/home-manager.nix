@@ -1,4 +1,4 @@
-{ username, openclawHomeManagerModule }:
+{ username }:
 { ... }:
 {
   home-manager = {
@@ -9,7 +9,6 @@
 
     users.${username} = { ... }: {
       imports = [
-        openclawHomeManagerModule
         ../home
       ];
     };

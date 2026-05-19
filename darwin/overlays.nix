@@ -1,6 +1,5 @@
 {
   vscodeExtensionsOverlay,
-  openclawOverlay,
 }:
 { ... }:
 let
@@ -11,7 +10,6 @@ in
 {
   nixpkgs.overlays = [
     vscodeExtensionsOverlay
-    openclawOverlay
     musicCliOverlay
   ];
 }

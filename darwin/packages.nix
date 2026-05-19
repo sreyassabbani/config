@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
+let
+  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   environment.systemPackages = with pkgs; [
     # yabai
@@ -20,6 +23,7 @@
     fritzing
     defaultbrowser
     fd
+    unstablePkgs.codex
     nixfmt-rfc-style
     nixd
     zoxide
