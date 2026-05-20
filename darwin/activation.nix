@@ -53,13 +53,21 @@ in
     pkgs.lib.mkForce ''
       echo "setting up /Applications..." >&2
       rm -rf /Applications/Nix\ Apps
-      mkdir -p /Applications/Nix\ Apps
 
       find ${env}/Applications -maxdepth 1 -type l |
       while read -r app; do
         app_name=$(basename "$app")
-        echo "linking $app_name" >&2
-        ln -s "$app" "/Applications/Nix Apps/$app_name"
+        target="/Applications/$app_name"
+        src=$(readlink "$app")
+
+        if [ -e "$target" ] && [ ! -L "$target" ] && [ -d "$target" ]; then
+          echo "skipping $target; a non-Nix app already exists there" >&2
+          continue
+        fi
+
+        echo "linking $target" >&2
+        rm -rf "$target"
+        ln -s "$src" "$target"
       done
     '';
 }
