@@ -21,6 +21,7 @@ in
     just
     jq
     fritzing
+    recordly
     defaultbrowser
     fd
     unstablePkgs.codex
