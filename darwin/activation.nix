@@ -55,11 +55,11 @@ in
       rm -rf /Applications/Nix\ Apps
       mkdir -p /Applications/Nix\ Apps
 
-      find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-      while read -r src; do
-        app_name=$(basename "$src")
-        echo "copying $src" >&2
-        ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+      find ${env}/Applications -maxdepth 1 -type l |
+      while read -r app; do
+        app_name=$(basename "$app")
+        echo "linking $app_name" >&2
+        ln -s "$app" "/Applications/Nix Apps/$app_name"
       done
     '';
 }
