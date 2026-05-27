@@ -17,6 +17,7 @@ in
     music-cli
     # spicetify-cli
     ripgrep
+    repgrep
     fh
     just
     jq
