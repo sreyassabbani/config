@@ -13,5 +13,6 @@
     ./ssh.nix
     ./ghostty.nix
     ./zsh.nix
+    ./zed.nix
   ];
 }

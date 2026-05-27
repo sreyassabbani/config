@@ -10,6 +10,12 @@ let
   pythonPyproject = builtins.readFile ./nushell/templates/python/pyproject.toml;
   pythonHelix = builtins.readFile ./nushell/templates/python/.helix/languages.toml;
   pythonReadme = builtins.readFile ./nushell/templates/python/README.md;
+  rustFlake = builtins.readFile ./nushell/templates/rust/flake.nix;
+  rustEnvrc = builtins.readFile ./nushell/templates/rust/.envrc;
+  rustGitignore = builtins.readFile ./nushell/templates/rust/.gitignore;
+  rustCargoToml = builtins.readFile ./nushell/templates/rust/Cargo.toml;
+  rustMain = builtins.readFile ./nushell/templates/rust/src/main.rs;
+  rustReadme = builtins.readFile ./nushell/templates/rust/README.md;
 in
 {
   programs.zsh = {
@@ -62,8 +68,9 @@ in
         case "$mode" in
           default|dev) ;;
           python|py) ;;
+          rust|rs) ;;
           *)
-            print -u2 "ds: unsupported template '$mode' (try: ds or ds python)"
+            print -u2 "ds: unsupported template '$mode' (try: ds, ds python, or ds rs)"
             return 1
             ;;
         esac
@@ -77,6 +84,12 @@ in
             ;;
           python|py)
             if [[ -e flake.nix || -e pyproject.toml || -e .helix/languages.toml ]]; then
+              print -u2 "ds: project files already exist here (won't overwrite)."
+              return 1
+            fi
+            ;;
+          rust|rs)
+            if [[ -e flake.nix || -e Cargo.toml || -e src/main.rs ]]; then
               print -u2 "ds: project files already exist here (won't overwrite)."
               return 1
             fi
@@ -108,6 +121,21 @@ ${pythonHelix}EOF
 ${pythonEnvrc}EOF
             cat > .gitignore <<'EOF'
 ${pythonGitignore}EOF
+            ;;
+          rust|rs)
+            cat > flake.nix <<'EOF'
+${rustFlake}EOF
+            cat > Cargo.toml <<'EOF'
+${rustCargoToml}EOF
+            cat > README.md <<'EOF'
+${rustReadme}EOF
+            mkdir -p src
+            cat > src/main.rs <<'EOF'
+${rustMain}EOF
+            cat > .envrc <<'EOF'
+${rustEnvrc}EOF
+            cat > .gitignore <<'EOF'
+${rustGitignore}EOF
             ;;
         esac
 
