@@ -12,6 +12,8 @@ in
     gnupg
     pinentry_mac
     fastfetch
+    btop
+    macmon
     dust
     git
     music-cli
