@@ -10,6 +10,7 @@
         "git.autofetch" = true;
         "editor.fontFamily" = "JetBrainsMono Nerd Font";
         "editor.fontLigatures" = true;
+        "manim-sideview.defaultManimPath" = "/Users/sreysus/workflow/egregium/playground/.venv/bin/manim";
       };
 
       extensions = with pkgs.vscode-marketplace; [
