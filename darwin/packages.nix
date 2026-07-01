@@ -8,6 +8,7 @@ in
     # skhd
     helix
     typst
+    tt
     mkalias
     gnupg
     pinentry_mac
