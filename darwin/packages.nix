@@ -12,6 +12,7 @@ in
     gnupg
     pinentry_mac
     fastfetch
+    fast
     btop
     macmon
     dust
