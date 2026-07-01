@@ -1,0 +1,30 @@
+diff --git a/main.go b/main.go
+index 9b20674..24c106a 100644
+--- a/main.go
++++ b/main.go
+@@ -28,13 +28,18 @@ const (
+ )
+ 
+ const accentColor = "#2EF8BB"
+ 
+ var (
+-	speedStyle = lipgloss.NewStyle().Bold(true)
+-	unitStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+-	sparkStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(accentColor))
+-	peakStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+-	baseStyle  = lipgloss.NewStyle().Padding(1, 2)
++	mutedColor = lipgloss.AdaptiveColor{
++		Light: "238",
++		Dark:  "248",
++	}
++
++	speedStyle = lipgloss.NewStyle().Bold(true)
++	unitStyle  = lipgloss.NewStyle().Foreground(mutedColor)
++	sparkStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(accentColor))
++	peakStyle  = lipgloss.NewStyle().Foreground(mutedColor)
++	baseStyle  = lipgloss.NewStyle().Padding(1, 2)
+ )
+ 
+ const tickInterval = time.Second / 10
+ 
+ type tickMsg time.Time

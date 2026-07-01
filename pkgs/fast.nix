@@ -15,6 +15,10 @@ buildGoModule {
     hash = "sha256-YeDx082+ySqzamo9UutFTXXkrb37nmqt3ZUNzUHShf4=";
   };
 
+  patches = [
+    ./fast-readable-muted-text.patch
+  ];
+
   vendorHash = "sha256-YSjJ8NOL97hXZLnfGYIjoKmARv+gWOsv+5qkl9konnA=";
 
   postPatch = ''
