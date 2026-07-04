@@ -34,5 +34,6 @@ in
     nixd
     zoxide
     fzf
+    saterminal
   ];
 }

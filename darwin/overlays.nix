@@ -13,6 +13,9 @@ let
   fastOverlay = final: _prev: {
     fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
   };
+  saterminalOverlay = final: _prev: {
+    saterminal = final.callPackage ../pkgs/saterminal.nix { };
+  };
 in
 {
   nixpkgs.overlays = [
@@ -20,5 +23,6 @@ in
     musicCliOverlay
     recordlyOverlay
     fastOverlay
+    saterminalOverlay
   ];
 }
