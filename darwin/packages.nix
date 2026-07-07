@@ -29,6 +29,8 @@ in
     recordly
     defaultbrowser
     fd
+    typescript
+    typescript-language-server
     unstablePkgs.codex
     nixfmt-rfc-style
     nixd
