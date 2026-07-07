@@ -23,6 +23,7 @@
 
       init.defaultBranch = "main";
       pull.rebase = true;
+      fetch.prune = true;
       merge.conflictstyle = "zdiff3";
       color.ui = "auto";
 
@@ -33,6 +34,7 @@
         br = "branch";
         ci = "commit";
         lg = "log --oneline --graph --decorate --all";
+        fetch-switch = "!f() { git fetch && if git rev-parse --verify \"$1\" >/dev/null 2>&1; then git switch \"$1\"; else git switch -c \"$1\" \"origin/$1\"; fi; }; f";
       };
     };
   };
