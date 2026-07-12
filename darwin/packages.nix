@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
 let
   unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  saterminalPackage = inputs.saterminal.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   environment.systemPackages = with pkgs; [
@@ -36,6 +37,6 @@ in
     nixd
     zoxide
     fzf
-    saterminal
+    saterminalPackage
   ];
 }
