@@ -10,6 +10,7 @@ in
     helix
     typst
     tt
+    yazi
     mkalias
     gnupg
     pinentry_mac
