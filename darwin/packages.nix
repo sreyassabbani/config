@@ -1,6 +1,5 @@
 { pkgs, inputs, ... }:
 let
-  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
   saterminalPackage = inputs.saterminal.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
@@ -33,7 +32,6 @@ in
     fd
     typescript
     typescript-language-server
-    unstablePkgs.codex
     nixfmt-rfc-style
     nixd
     zoxide

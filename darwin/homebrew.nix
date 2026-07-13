@@ -10,6 +10,9 @@
   homebrew = {
     enable = true;
 
+    # Prefer Homebrew for fast-moving, self-updating macOS apps and CLIs. Nix
+    # remains the owner of reproducible system and development dependencies.
+
     taps = [
       "modem-dev/tap"
       "steipete/tap"
@@ -57,14 +60,19 @@
       "anki"
       "antigravity"
       "visual-studio-code"
-      "chatgpt-atlas"
+      "codex"
+      {
+        name = "chatgpt";
+        greedy = true;
+      }
       "the-unarchiver"
       "zen"
     ];
 
     masApps = { };
 
-    onActivation.cleanup = "zap";
+    # Remove undeclared apps without deleting their preferences or user data.
+    onActivation.cleanup = "uninstall";
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
   };
