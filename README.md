@@ -24,6 +24,18 @@ Overall: generally,
 - `home/` is user environment: shell config, editor config, Git, GPG, SSH,
   Ghostty, project templates, and other local tooling.
 
+## Package ownership and updates
+
+- Nix owns pinned system and development tools. Update them intentionally through
+  `flake.lock` when reproducibility matters more than receiving a release immediately.
+- Homebrew owns fast-moving macOS apps and tools with built-in update expectations, such
+  as ChatGPT and Codex. A rebuild updates them without tying their release cadence to
+  `nixpkgs`.
+- Homebrew cleanup uses ordinary uninstall instead of `zap`, so removing an app does not
+  also erase its preferences or user data.
+- Generated project dev shells are optional conveniences. Project-native manifests and
+  lockfiles remain the setup contract for teammates who do not use Nix or `direnv`.
+
 ### Experimental
 - [`typst-figure`](home/typst.nix) creates an SVG figure file and opens it in Inkscape from inside
   Helix; still working out my specific setup for writing technical documents easily
