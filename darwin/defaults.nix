@@ -14,7 +14,7 @@
       persistent-apps = [
         { app = "/Applications/Anki.app"; }
         { app = "/Applications/Ghostty.app"; }
-        { app = "/Applications/ChatGPT Atlas.app"; }
+        { app = "/Applications/ChatGPT.app"; }
         { app = "/Applications/Zen.app"; }
         { app = "/Applications/Obsidian.app"; }
         { app = "/Applications/Notion Calendar.app"; }
