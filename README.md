@@ -19,22 +19,14 @@ Of the many things this repo configures, the following are important notes:
   - dock is small, hidden, and is very minimal
 
 Overall: generally,
-- `darwin/` is the Mac: packages, Homebrew apps, fonts, Dock defaults, the
-  default browser, user shell, and system activation bits.
-- `home/` is user environment: shell config, editor config, Git, GPG, SSH,
-  Ghostty, project templates, and other local tooling.
-
-## Package ownership and updates
-
-- Nix owns pinned system and development tools. Update them intentionally through
-  `flake.lock` when reproducibility matters more than receiving a release immediately.
-- Homebrew owns fast-moving macOS apps and tools with built-in update expectations, such
-  as ChatGPT and Codex. A rebuild updates them without tying their release cadence to
-  `nixpkgs`.
-- Homebrew cleanup uses ordinary uninstall instead of `zap`, so removing an app does not
-  also erase its preferences or user data.
-- Generated project dev shells are optional conveniences. Project-native manifests and
-  lockfiles remain the setup contract for teammates who do not use Nix or `direnv`.
+- [`darwin/`](darwin) is the Mac: [packages](darwin/packages.nix),
+  [Homebrew apps](darwin/homebrew.nix), [fonts](darwin/fonts.nix),
+  [Dock defaults](darwin/defaults.nix), the [default browser](darwin/activation.nix),
+  [user shell](darwin/users.nix), and [system activation bits](darwin/activation.nix).
+- [`home/`](home) is user environment: [shell config](home/nushell.nix),
+  [editor config](home/helix.nix), [Git](home/git.nix), [GPG](home/gpg.nix),
+  [SSH](home/ssh.nix), [Ghostty](home/ghostty.nix),
+  [project templates](home/nushell/templates), and [other local tooling](home/core.nix).
 
 ### Experimental
 - [`typst-figure`](home/typst.nix) creates an SVG figure file and opens it in Inkscape from inside
