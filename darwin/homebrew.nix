@@ -73,7 +73,10 @@
 
     # Remove undeclared apps without deleting their preferences or user data.
     onActivation.cleanup = "uninstall";
-    onActivation.autoUpdate = true;
-    onActivation.upgrade = true;
+
+    # Keep system activation idempotent and independent of vendor download
+    # availability. Upgrade Homebrew packages explicitly instead.
+    onActivation.autoUpdate = false;
+    onActivation.upgrade = false;
   };
 }
