@@ -48,6 +48,9 @@
         normal = {
           ret = "goto_word";
 
+          "\\" = "shell_pipe";
+          "|" = "shell_pipe_to";
+
           space = {
             I = ''@mi":run-shell-command typst-figure "%{selection}"<ret>'';
             i = ":toggle lsp.display-inlay-hints";
