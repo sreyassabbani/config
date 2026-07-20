@@ -412,11 +412,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783893484,
-        "narHash": "sha256-v6s1twRACIPShTqrHLEnkmOlDne2QBW7fNhAAImHNfA=",
+        "lastModified": 1784568527,
+        "narHash": "sha256-u9OohQ2+UR99yA1+0eoJddClHqCRqFVpwCpc4prgl9A=",
         "owner": "sreyassabbani",
         "repo": "saterminal",
-        "rev": "f28078e4205078ea56b0e9fb28ed44807df1f132",
+        "rev": "5b9f67f9d6175cb0cef7c46ef4ec2f5f4ea16360",
         "type": "github"
       },
       "original": {
