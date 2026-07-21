@@ -15,6 +15,7 @@
 
     taps = [
       "modem-dev/tap"
+      "sreyassabbani/tap"
       "steipete/tap"
     ];
 
@@ -29,6 +30,7 @@
       "gemini-cli"
       "tcl-tk"
       "python"
+      "sreyassabbani/tap/saterminal"
       "go"
       "tree"
       "googleworkspace-cli"

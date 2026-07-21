@@ -1,7 +1,4 @@
-{ pkgs, inputs, ... }:
-let
-  saterminalPackage = inputs.saterminal.packages.${pkgs.stdenv.hostPlatform.system}.default;
-in
+{ pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
     # yabai
@@ -36,6 +33,5 @@ in
     nixd
     zoxide
     fzf
-    saterminalPackage
   ];
 }
