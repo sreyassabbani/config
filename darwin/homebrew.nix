@@ -21,6 +21,7 @@
 
     brews = [
       "mas"
+      "bun"
       "bat"
       "ffmpeg"
       "spogo"
