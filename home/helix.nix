@@ -112,6 +112,15 @@
 
       language = [
         {
+          name = "ghostty";
+          "file-types" = [
+            "ghostty"
+            { glob = "ghostty/config"; }
+            { glob = "ghostty.conf"; }
+          ];
+        }
+
+        {
           name = "java";
           roots = [
             "pom.xml"
