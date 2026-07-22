@@ -1,7 +1,59 @@
 { config, pkgs, ... }:
+let
+  skhdGrammar = pkgs.fetchFromGitHub {
+    owner = "aimuzov";
+    repo = "tree-sitter-skhdrc";
+    rev = "47397c84bfef3c9b9d76eb4d673be0a0500e428c";
+    hash = "sha256-NCw9Owij/icXAxxxYRkZ0j+YpbCxFZtXzQZqaQ9V9ug=";
+  };
+
+  skhdHelixRuntime = pkgs.stdenv.mkDerivation {
+    pname = "helix-skhdrc-runtime";
+    version = "unstable-2026-04-14";
+    src = skhdGrammar;
+
+    buildPhase = ''
+      runHook preBuild
+
+      $CC -O3 -fPIC -shared -Isrc src/parser.c -o skhdrc.so
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 skhdrc.so "$out/lib/runtime/grammars/skhdrc.so"
+      install -Dm644 queries/skhdrc/highlights.scm \
+        "$out/lib/runtime/queries/skhdrc/highlights.scm"
+      install -Dm644 queries/skhdrc/injections.scm \
+        "$out/lib/runtime/queries/skhdrc/injections.scm"
+
+      # The upstream Neovim queries call modes modules; Helix's equivalent
+      # highlight scope is namespace.
+      substituteInPlace "$out/lib/runtime/queries/skhdrc/highlights.scm" \
+        --replace-fail "@module" "@namespace"
+
+      runHook postInstall
+    '';
+  };
+
+  helixWithSkhd = pkgs.symlinkJoin {
+    name = "helix-with-skhd-${pkgs.helix.version}";
+    paths = [
+      pkgs.helix
+      skhdHelixRuntime
+    ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram "$out/bin/hx" --set HELIX_RUNTIME "$out/lib/runtime"
+    '';
+  };
+in
 {
   programs.helix = {
     enable = true;
+    package = helixWithSkhd;
     defaultEditor = true;
 
     settings = {
@@ -111,6 +163,23 @@
       editor."auto-format" = true;
 
       language = [
+        {
+          name = "skhdrc";
+          scope = "source.skhdrc";
+          "file-types" = [
+            "skhdrc"
+            { glob = "skhdrc"; }
+            { glob = ".skhdrc"; }
+          ];
+          "comment-token" = "#";
+          grammar = "skhdrc";
+          "auto-format" = false;
+          indent = {
+            "tab-width" = 2;
+            unit = "  ";
+          };
+        }
+
         {
           name = "ghostty";
           "file-types" = [
