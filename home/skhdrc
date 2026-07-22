@@ -1,0 +1,18 @@
+# Open the Ghostty configuration in a purpose-sized Ghostty window.
+cmd - 0x2B [
+  "Ghostty" : /usr/bin/osascript \
+    -e 'set configPath to (POSIX path of (path to home folder)) & "nix/home/ghostty.conf"' \
+    -e 'tell application "Ghostty"' \
+    -e 'set cfg to new surface configuration' \
+    -e 'set command of cfg to "/etc/profiles/per-user/sreysus/bin/hx " & configPath' \
+    -e 'new window with configuration cfg' \
+    -e 'end tell' \
+    -e 'delay 0.1' \
+    -e 'tell application "System Events"' \
+    -e 'tell process "Ghostty"' \
+    -e 'set size of front window to {1000, 700}' \
+    -e 'set position of front window to {140, 100}' \
+    -e 'end tell' \
+    -e 'end tell'
+  * ~
+]
