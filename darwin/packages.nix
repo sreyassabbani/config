@@ -2,7 +2,7 @@
 {
   environment.systemPackages = with pkgs; [
     # yabai
-    # skhd
+    skhd
     helix
     typst
     tt
