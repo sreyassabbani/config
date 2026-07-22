@@ -23,6 +23,9 @@
       font-family = "GeistMono Nerd Font Mono";
 
       keybind = [
+        # note to self: if I end up further customizing Ghostty keybinds, then I should think
+        # about adding the element "clear" to the top of this list, which clears all keybinds upto that point
+
         "shift+enter=text:\\n"
 
         # Okay, so I've decided on ctrl being mainly the "Ghostty key"
