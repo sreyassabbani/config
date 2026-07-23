@@ -164,6 +164,18 @@ in
 
       language = [
         {
+          name = "rust";
+          auto-format = true;
+          formatter = {
+            command = "rustfmt";
+            args = [
+              "--edition"
+              "2024"
+            ];
+          };
+        }
+
+        {
           name = "skhdrc";
           scope = "source.skhdrc";
           "file-types" = [
