@@ -26,3 +26,26 @@ $env.config = (($env.config? | default {}) | merge {
   highlight_resolved_externals: true
   color_config: (dark-theme)
 })
+
+# Auto-activate per-project overlays: entering a directory containing
+# overlay.nu brings its commands into scope; leaving hides them again.
+$env.config.hooks = ($env.config.hooks? | default {})
+$env.config.hooks.env_change = ($env.config.hooks.env_change? | default {})
+$env.config.hooks.env_change.PWD = (
+  $env.config.hooks.env_change.PWD?
+  | default []
+  | append [
+    {
+      condition: {|_, after| ($after | path join "overlay.nu" | path exists) }
+      code: "overlay use overlay.nu"
+    }
+    {
+      condition: {|before, after|
+        (overlay list | where name == "overlay" | get active | any {|active| $active })
+        and (not ($after | path join "overlay.nu" | path exists))
+        and ($before | path join "overlay.nu" | path exists)
+      }
+      code: "overlay hide overlay --keep-env [ PWD ]"
+    }
+  ]
+)
