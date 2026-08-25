@@ -41,9 +41,11 @@ $env.config.hooks.env_change.PWD = (
     }
     {
       condition: {|before, after|
-        (overlay list | where name == "overlay" | get active | any {|active| $active })
-        and (not ($after | path join "overlay.nu" | path exists))
-        and ($before | path join "overlay.nu" | path exists)
+        (
+          (overlay list | where name == "overlay" | get active | any {|active| $active })
+          and (not ($after | path join "overlay.nu" | path exists))
+          and ($before | path join "overlay.nu" | path exists)
+        )
       }
       code: "overlay hide overlay --keep-env [ PWD ]"
     }
