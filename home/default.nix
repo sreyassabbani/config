@@ -13,7 +13,6 @@
     ./nushell.nix
     ./vscode.nix
     ./ssh.nix
-    ./skhd.nix
     ./ghostty.nix
     ./zsh.nix
   ];
