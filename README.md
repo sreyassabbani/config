@@ -11,7 +11,7 @@ Of the many things this repo configures, the following are important notes:
   - [`zoxide` bound](home/nushell/zoxide.nu) to `cd`
   - easy project management with [`direnv`](home/direnv.nix)
   - easy [project startup](home/nushell/ds.nu) with [auto-gen templates](home/nushell/templates)
-    - opionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
+    - opinionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
 - [Zen](darwin/homebrew.nix:60) as the browser,
 - Catppuccin Frappe everywhere possible
 - Mac setup
