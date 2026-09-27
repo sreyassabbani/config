@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   defaultFlake = builtins.readFile ./nushell/templates/default/flake.nix;
   defaultEnvrc = builtins.readFile ./nushell/templates/default/.envrc;
@@ -31,7 +31,8 @@ in
       dr = "sudo darwin-rebuild switch --flake ~/nix#${config.home.username}-${pkgs.stdenv.hostPlatform.system}";
     };
 
-    initContent = ''
+    initContent = lib.mkMerge [
+    ''
       setopt PROMPT_SUBST
 
       function update_prompt() {
@@ -56,8 +57,6 @@ in
       ZSH_THEME_GIT_PROMPT_SUFFIX="%f"
       ZSH_THEME_GIT_PROMPT_DIRTY="%F{$CTP_OVERLAY0}] ✖ %f"
       ZSH_THEME_GIT_PROMPT_CLEAN="%F{$CTP_OVERLAY0}] ✔%f"
-
-      eval "$(zoxide init --cmd cd zsh)"
 
       ds() {
         emulate -L zsh
@@ -152,6 +151,12 @@ ${rustGitignore}EOF
       autoload -Uz edit-command-line
       zle -N edit-command-line
       bindkey '^x^e' edit-command-line
-    '';
+    ''
+
+    # Run after other shell integrations so zoxide's hook remains last.
+    (lib.mkOrder 2000 ''
+      eval "$(zoxide init --cmd cd zsh)"
+    '')
+    ];
   };
 }
