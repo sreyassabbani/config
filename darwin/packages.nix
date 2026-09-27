@@ -28,6 +28,7 @@
     fd
     typescript
     typescript-language-server
+    (callPackage ../pkgs/pnpm.nix { })
     nixfmt-rfc-style
     nixd
     zoxide
