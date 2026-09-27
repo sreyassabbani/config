@@ -5,6 +5,11 @@
     enableRosetta = true;
     user = config.system.primaryUser;
     autoMigrate = true;
+    trust.formulae = [
+      "anomalyco/tap/opencode"
+      "sreyassabbani/tap/saterminal"
+      "steipete/tap/spogo"
+    ];
   };
 
   homebrew = {
@@ -21,20 +26,17 @@
     ];
 
     brews = [
-      "anomalyco/tap/opencode"
       "ghostscript"
       "mas"
       "bun"
       "bat"
       "ffmpeg"
-      "spogo"
       "poppler"
       "gh"
       "tldr"
       "gemini-cli"
       "tcl-tk"
       "python"
-      "sreyassabbani/tap/saterminal"
       "go"
       "tree"
       "googleworkspace-cli"
@@ -79,8 +81,17 @@
 
     masApps = { };
 
-    # Remove undeclared apps without deleting their preferences or user data.
-    onActivation.cleanup = "uninstall";
+    # The pinned nix-darwin emits --cleanup, which Homebrew 7 no longer accepts.
+    # Keep the same uninstall behavior with Homebrew's supported flag.
+    onActivation.cleanup = "none";
+    onActivation.extraFlags = [ "--force-cleanup" ];
+
+    # Keep trust entries in the Brewfile so --force-cleanup preserves them.
+    extraConfig = ''
+      brew "anomalyco/tap/opencode", trusted: true
+      brew "sreyassabbani/tap/saterminal", trusted: true
+      brew "steipete/tap/spogo", trusted: true
+    '';
 
     # Keep system activation idempotent and independent of vendor download
     # availability. Upgrade Homebrew packages explicitly instead.
