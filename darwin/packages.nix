@@ -9,6 +9,7 @@
     mkalias
     gnupg
     pinentry_mac
+    git-lfs
     fastfetch
     fast
     btop
