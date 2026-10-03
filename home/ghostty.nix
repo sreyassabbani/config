@@ -11,5 +11,5 @@
   };
 
   xdg.configFile."ghostty/config".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/home/ghostty.conf";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/config/home/ghostty.conf";
 }

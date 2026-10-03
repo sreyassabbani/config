@@ -28,7 +28,7 @@ in
     };
 
     shellAliases = {
-      dr = "sudo darwin-rebuild switch --flake ~/nix#${config.home.username}-${pkgs.stdenv.hostPlatform.system}";
+      dr = "sudo darwin-rebuild switch --flake ~/config#${config.home.username}-${pkgs.stdenv.hostPlatform.system}";
     };
 
     initContent = lib.mkMerge [
