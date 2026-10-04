@@ -47,7 +47,7 @@
       "onedrive"
       "opencode-desktop"
       # "gcloud-cli"
-      # "blender"
+      "blender"
       # "firefox"
       "helium-browser"
       "hammerspoon"
