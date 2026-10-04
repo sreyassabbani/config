@@ -9,6 +9,7 @@
     ./git.nix
     ./helix.nix
     ./tt.nix
+    ./tcut.nix
     ./typst.nix
     ./nushell.nix
     ./vscode.nix

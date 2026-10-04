@@ -1,8 +1,9 @@
-{ ... }:
+{ config, ... }:
 {
   home.file = {
     # Keep Nushell support files under the managed config directory, not in Nix strings.
-    "Library/Application Support/nushell/lib/path.nu".source = ./nushell/path.nu;
+    "Library/Application Support/nushell/lib/path.nu".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/config/home/nushell/path.nu";
     "Library/Application Support/nushell/lib/prompt.nu".source = ./nushell/prompt.nu;
     "Library/Application Support/nushell/lib/aliases.nu".source = ./nushell/aliases.nu;
     "Library/Application Support/nushell/lib/zoxide.nu".source = ./nushell/zoxide.nu;

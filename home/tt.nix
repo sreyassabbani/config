@@ -1,5 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 {
+  home.file.".local/bin/tt" = {
+    source = "${pkgs.tt}/bin/tt";
+    force = true;
+  };
+
   home.file.".tt/themes/catppuccin-frappe".text = ''
     bgcol: #303446
     fgcol: #838ba7

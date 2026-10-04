@@ -334,7 +334,21 @@
         "nix-homebrew": "nix-homebrew",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "tt-src": "tt-src"
+      }
+    },
+    "tt-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791144151,
+        "narHash": "sha256-3pVcJSvMWRW1N1LBV9q8aCBKozQXaouO28b6FVNbeHw=",
+        "path": "/Users/sreysus/workflow/tt",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/sreysus/workflow/tt",
+        "type": "path"
       }
     }
   },

@@ -8,6 +8,12 @@
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # Local tt fork: terminal rendering fixes are built from this checkout.
+    tt-src = {
+      url = "path:/Users/sreysus/workflow/tt";
+      flake = false;
+    };
+
     nix-darwin = {
       url = "https://flakehub.com/f/nix-darwin/nix-darwin/0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -130,5 +136,9 @@
       # Formatter
       ########################################
       formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+
+      packages.${system}.tt = inputs.nixpkgs.legacyPackages.${system}.callPackage ./pkgs/tt.nix {
+        source = inputs.tt-src;
+      };
     };
 }

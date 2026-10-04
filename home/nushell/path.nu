@@ -2,8 +2,9 @@ $env.config = (($env.config? | default {}) | merge {
   show_banner: false
 })
 
+let local_bin = ([$env.HOME ".local" "bin"] | path join)
 let base_path = [
-  ([$env.HOME ".local" "bin"] | path join)
+  $local_bin
   "/Users/sreysus/.bun/bin"
   "/Users/sreysus/.nix-profile/bin"
   "/nix/var/nix/profiles/default/bin"
@@ -18,4 +19,4 @@ let base_path = [
   "/sbin"
 ]
 
-$env.PATH = (($env.PATH? | default []) ++ $base_path | uniq)
+$env.PATH = ([$local_bin] ++ ($env.PATH? | default []) ++ $base_path | uniq)

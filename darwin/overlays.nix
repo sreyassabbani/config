@@ -13,6 +13,9 @@ let
   fastOverlay = final: _prev: {
     fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
   };
+  ttOverlay = final: _prev: {
+    tt = final.callPackage ../pkgs/tt.nix { source = inputs.tt-src; };
+  };
 in
 {
   nixpkgs.overlays = [
@@ -20,5 +23,6 @@ in
     musicCliOverlay
     recordlyOverlay
     fastOverlay
+    ttOverlay
   ];
 }
