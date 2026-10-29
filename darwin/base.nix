@@ -6,6 +6,7 @@
     ./defaults.nix
     ./fonts.nix
     ./packages.nix
+    ./rex.nix
     ./users.nix
     ./window-manager.nix
   ];
