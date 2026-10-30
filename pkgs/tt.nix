@@ -5,6 +5,11 @@
   source,
 }:
 
+# After editing ~/workflow/tt, refresh and test the local source:
+#   nix flake update tt-src
+#   nix build .#tt
+#   ./result/bin/tt -theme catppuccin-frappe
+# Configuration activation installs the package and updates ~/.local/bin/tt.
 buildGoModule {
   pname = "tt";
   version = "0.4.2-truecolor";
