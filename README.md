@@ -12,11 +12,12 @@ Of the many things this repo configures, the following are important notes:
   - easy project management with [`direnv`](home/direnv.nix)
   - easy [project startup](home/nushell/ds.nu) with [auto-gen templates](home/nushell/templates)
     - opinionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
-- [Zen](darwin/homebrew.nix:60) as the browser,
+- [Chrome](darwin/homebrew.nix#L79) as the browser (after trying out various browsers for 5+ yrs)
 - Catppuccin Frappe everywhere possible
-- Mac setup
+- MacBook setup
   - `caps lock` remapped to `esc`
   - dock is small, hidden, and is very minimal
+  - [named](darwin/base.nix#L14-L18) Blue
 
 Overall: generally,
 - [`darwin/`](darwin) is the Mac: [packages](darwin/packages.nix),
@@ -31,7 +32,3 @@ Overall: generally,
 ### Experimental
 - [`typst-figure`](home/typst.nix) creates an SVG figure file and opens it in Inkscape from inside
   Helix; still working out my specific setup for writing technical documents easily
-
-### Guides
-
-- [Terminal captures for posts](docs/tcut.md)

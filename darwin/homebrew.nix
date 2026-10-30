@@ -76,6 +76,7 @@
         greedy = true;
       }
       "the-unarchiver"
+      "google-chrome"
       # "zen"
     ];
 
