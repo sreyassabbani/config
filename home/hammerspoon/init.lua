@@ -3,13 +3,15 @@ local rex = os.getenv("HOME") .. "/Library/Application Support/com.superlogical.
 local bundle = "com.superlogical.rex"
 
 hs.hotkey.bind({ "cmd" }, "`", function()
-  hs.application.launchOrFocusByBundleID(bundle)
+  if not hs.application.get(bundle) then
+    hs.application.launchOrFocusByBundleID(bundle)
+  end
   local attempts = 0
   local function openWindow()
     attempts = attempts + 1
     local task = hs.task.new(rex, function(code, _, stderr)
       if code == 0 then
-        hs.application.launchOrFocusByBundleID(bundle)
+        return
       elseif attempts < 10 then
         hs.timer.doAfter(0.5, openWindow)
       else
