@@ -2,6 +2,7 @@
 {
   imports = [
     ./core.nix
+    ./mobile-development.nix
     ./codex.nix
     ./opencode.nix
     ./direnv.nix
