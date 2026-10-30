@@ -2,7 +2,7 @@
 local rex = os.getenv("HOME") .. "/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex"
 local bundle = "com.superlogical.rex"
 
-hs.hotkey.bind({ "cmd", "shift" }, "`", function()
+hs.hotkey.bind({ "cmd" }, "`", function()
   hs.application.launchOrFocusByBundleID(bundle)
   local attempts = 0
   local function openWindow()
