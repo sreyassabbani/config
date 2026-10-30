@@ -2,6 +2,7 @@
 {
   # Rex stores these client settings in macOS preferences, not init.lua.
   system.defaults.CustomUserPreferences."com.superlogical.rex" = {
+    "rex.client.label" = "Blue";
     "Workspace.appearance" = "dark";
     "Workspace.showsWindowOnLaunch" = false;
     "Workspace.terminalFontName" = "GeistMono Nerd Font Mono";

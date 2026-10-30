@@ -11,6 +11,12 @@
     ./window-manager.nix
   ];
 
+  networking = {
+    computerName = "Blue";
+    hostName = "blue";
+    localHostName = "blue";
+  };
+
   system.stateVersion = 6;
   system.configurationRevision = self.rev or self.dirtyRev or null;
   system.primaryUser = username;
