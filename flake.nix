@@ -137,8 +137,18 @@
       ########################################
       formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
 
-      packages.${system}.tt = inputs.nixpkgs.legacyPackages.${system}.callPackage ./pkgs/tt.nix {
-        source = inputs.tt-src;
+      packages.${system} = {
+        tt = inputs.nixpkgs.legacyPackages.${system}.callPackage ./pkgs/tt.nix {
+          source = inputs.tt-src;
+        };
+        mobile-development =
+          let
+            pkgs = import inputs.nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          in
+          (import ./pkgs/mobile-development.nix { inherit pkgs; }).package;
       };
     };
 }
