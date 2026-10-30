@@ -4,6 +4,10 @@
   system.keyboard.remapCapsLockToEscape = true;
 
   system.defaults = {
+    NSGlobalDomain = {
+      AppleSpacesSwitchOnActivate = false;
+    };
+
     dock = {
       autohide = true;
       show-recents = false;
@@ -13,7 +17,7 @@
 
       persistent-apps = [
         { app = "/Applications/Anki.app"; }
-        { app = "/Applications/Ghostty.app"; }
+        { app = "/Applications/Rex Beta.app"; }
         { app = "/Applications/ChatGPT.app"; }
         { app = "/Applications/Google Chrome.app"; }
         { app = "/Applications/Obsidian.app"; }
