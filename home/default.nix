@@ -15,6 +15,7 @@
     ./vscode.nix
     ./ssh.nix
     ./ghostty.nix
+    ./hammerspoon.nix
     ./rex.nix
     ./zsh.nix
   ];
