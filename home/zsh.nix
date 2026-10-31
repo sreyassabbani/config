@@ -27,8 +27,15 @@ in
       theme = "robbyrussell";
     };
 
+    # Agent shells (Claude Code, Codex) replay zsh functions, including
+    # zoxide's `cd`, without the chpwd hooks, so zoxide's doctor fires on every
+    # `cd`. Keep the check for real terminals only.
+    envExtra = ''
+      [[ -o interactive ]] || export _ZO_DOCTOR=0
+    '';
+
     shellAliases = {
-      dr = "sudo darwin-rebuild switch --flake ~/config#${config.home.username}-${pkgs.stdenv.hostPlatform.system}";
+      dr ="sudo darwin-rebuild switch --flake ~/config#${config.home.username}-${pkgs.stdenv.hostPlatform.system}";
     };
 
     initContent = lib.mkMerge [
