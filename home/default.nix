@@ -17,6 +17,7 @@
     ./ssh.nix
     ./ghostty.nix
     ./hammerspoon.nix
+    ./anki-blue.nix
     ./rex.nix
     ./zsh.nix
   ];
