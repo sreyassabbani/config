@@ -32,6 +32,11 @@ in
     # `cd`. Keep the check for real terminals only.
     envExtra = ''
       [[ -o interactive ]] || export _ZO_DOCTOR=0
+
+      # GUI agents may inherit a PATH without user or Homebrew tools. Append them
+      # so an existing project dev shell still takes precedence.
+      typeset -U path
+      path+=(${lib.escapeShellArg "${config.home.homeDirectory}/.local/bin"} ${lib.escapeShellArg "${config.home.homeDirectory}/.t3/bin"} /opt/homebrew/bin /opt/homebrew/sbin)
     '';
 
     shellAliases = {

@@ -5,6 +5,9 @@
   ...
 }:
 {
+  home.file.".local/bin/rex".source =
+    config.lib.file.mkOutOfStoreSymlink "/Applications/Rex Beta.app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex";
+
   xdg.configFile."rex/init.lua".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/config/home/rex/init.lua";
 

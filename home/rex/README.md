@@ -1,5 +1,7 @@
 # Rex
 
+Home Manager exposes the installed Rex Beta app's bundled CLI as `~/.local/bin/rex`.
+
 Home Manager links `init.lua` into `~/.config/rex`; run `rex config reload`
 after edits. Client appearance and the startup command are in `darwin/rex.nix`.
 The startup command applies to new terminals created by the Mac app; CLI-created

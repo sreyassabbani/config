@@ -3,8 +3,10 @@
   imports = [
     ./core.nix
     ./mobile-development.nix
+    ./agents.nix
     ./codex.nix
     ./opencode.nix
+    ./t3code.nix
     ./direnv.nix
     ./gpg.nix
     ./git.nix

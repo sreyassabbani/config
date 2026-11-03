@@ -16,6 +16,8 @@ Of the many things this repo configures, the following are important notes:
 - Catppuccin Frappe everywhere possible
 - [Anki on the tailnet](home/anki-blue.nix): a web front end for my Anki collection at
   `https://blue.tailf5907c.ts.net`, synced through AnkiWeb (code in `~/workflow/anki-blue`)
+- [Agent instructions](home/agents/instructions.md) shared by Codex, Claude Code,
+  OpenCode, and Gemini CLI; [T3 preferences](home/t3code.nix) merged on activation
 - MacBook setup
   - `caps lock` remapped to `esc`
   - dock is small, hidden, and is very minimal
@@ -30,6 +32,8 @@ Overall: generally,
   [editor config](home/helix.nix), [Git](home/git.nix), [GPG](home/gpg.nix),
   [SSH](home/ssh.nix), [Ghostty](home/ghostty.nix),
   [project templates](home/nushell/templates), and [other local tooling](home/core.nix).
+
+Agent setup details and outstanding choices are in [home/agents](home/agents/README.md).
 
 ### Experimental
 - [`typst-figure`](home/typst.nix) creates an SVG figure file and opens it in Inkscape from inside
