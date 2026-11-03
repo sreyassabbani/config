@@ -1,4 +1,14 @@
-{ lib, ... }:
+{ config, lib, ... }:
+let
+  # Personally maintained skills. Each is linked live from this repo, so edits
+  # apply immediately; adding or removing one needs a rebuild.
+  skillsDir = "${config.home.homeDirectory}/config/home/agents/skills";
+  skills = builtins.attrNames (lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./agents/skills));
+  skillRoots = [
+    ".claude/skills"
+    ".codex/skills"
+  ];
+in
 {
   home.file =
     lib.genAttrs
@@ -10,5 +20,14 @@
       ]
       (_: {
         source = ./agents/instructions.md;
-      });
+      })
+    // lib.listToAttrs (
+      lib.concatMap (
+        root:
+        map (name: {
+          name = "${root}/${name}";
+          value.source = config.lib.file.mkOutOfStoreSymlink "${skillsDir}/${name}";
+        }) skills
+      ) skillRoots
+    );
 }
