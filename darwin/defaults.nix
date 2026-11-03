@@ -19,7 +19,7 @@
         { app = "/Applications/Anki.app"; }
         { app = "/Applications/Rex Beta.app"; }
         { app = "/Applications/ChatGPT.app"; }
-        { app = "/Applications/Google Chrome.app"; }
+        { app = "/Applications/Helium.app"; }
         { app = "/Applications/Obsidian.app"; }
         { app = "/Applications/Notion Calendar.app"; }
         { app = "/Applications/Zotero.app"; }

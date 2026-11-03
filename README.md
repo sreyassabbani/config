@@ -12,7 +12,7 @@ Of the many things this repo configures, the following are important notes:
   - easy project management with [`direnv`](home/direnv.nix)
   - easy [project startup](home/nushell/ds.nu) with [auto-gen templates](home/nushell/templates)
     - opinionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
-- [Chrome](darwin/homebrew.nix#L79) as the browser (after trying out various browsers for 5+ yrs)
+- [Helium](darwin/homebrew.nix) as the browser
 - Catppuccin Frappe everywhere possible
 - [Anki on the tailnet](home/anki-blue.nix): a web front end for my Anki collection at
   `https://blue.tailf5907c.ts.net`, synced through AnkiWeb (code in `~/workflow/anki-blue`)

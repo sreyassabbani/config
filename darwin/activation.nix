@@ -6,8 +6,8 @@ in
 {
   system.activationScripts.defaultBrowser.text = ''
     # See available names:
-    #   ${pkgs.defaultbrowser}/bin/defaultbrowser -l
-    ${pkgs.defaultbrowser}/bin/defaultbrowser "Zen Browser"
+    #   ${pkgs.defaultbrowser}/bin/defaultbrowser
+    ${pkgs.defaultbrowser}/bin/defaultbrowser helium
   '';
 
   system.activationScripts.finderFolderViews.text = ''
