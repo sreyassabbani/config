@@ -7,6 +7,7 @@
     ./fonts.nix
     ./packages.nix
     ./rex.nix
+    ./steam.nix
     ./users.nix
     ./window-manager.nix
   ];
