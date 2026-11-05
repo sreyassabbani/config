@@ -6,7 +6,7 @@
     user = config.system.primaryUser;
     autoMigrate = true;
     trust.formulae = [
-      "anomalyco/tap/opencode"
+      "anomalyco/tap/opencode-v2"
       "sreyassabbani/tap/saterminal"
       "steipete/tap/spogo"
     ];
@@ -88,7 +88,7 @@
 
     # Keep trust entries in the Brewfile so --force-cleanup preserves them.
     extraConfig = ''
-      brew "anomalyco/tap/opencode", trusted: true
+      brew "anomalyco/tap/opencode-v2", trusted: true
       brew "sreyassabbani/tap/saterminal", trusted: true
       brew "steipete/tap/spogo", trusted: true
     '';
