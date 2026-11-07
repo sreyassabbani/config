@@ -1,8 +1,43 @@
--- Launch Rex on a cold start; otherwise open a new app window.
 local bundle = "com.superlogical.rex"
 local busy = false
 
 hs.hotkey.bind({ "cmd" }, "`", function()
+  local space = hs.spaces.focusedSpace()
+  if not space then
+    hs.alert.show("Could not determine the current desktop")
+    return
+  end
+
+  local focused = hs.window.focusedWindow()
+  local app = hs.application.get(bundle)
+  local candidates = {}
+  for _, window in ipairs(app and app:allWindows() or {}) do
+    if window:isStandard() then
+      for _, windowSpace in ipairs(hs.spaces.windowSpaces(window) or {}) do
+        if windowSpace == space then
+          table.insert(candidates, window)
+          break
+        end
+      end
+    end
+  end
+
+  if #candidates == 0 then
+    hs.alert.show("No Rex windows on this desktop")
+    return
+  end
+
+  -- If Rex is already focused, switch to its next window on this desktop.
+  local target = candidates[1]
+  if focused and target:id() == focused:id() and #candidates > 1 then
+    target = candidates[2]
+  end
+  target:unminimize()
+  target:focus()
+end)
+
+-- Launch Rex on a cold start; otherwise open a new app window.
+hs.hotkey.bind({ "cmd", "shift" }, "`", function()
   if busy then return end
   busy = true
 
