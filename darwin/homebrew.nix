@@ -71,10 +71,7 @@
       "antigravity"
       "visual-studio-code"
       "codex"
-      {
-        name = "chatgpt";
-        greedy = true;
-      }
+      "chatgpt"
       "the-unarchiver"
       # "zen"
     ];
@@ -93,9 +90,10 @@
       brew "steipete/tap/spogo", trusted: true
     '';
 
-    # Keep system activation idempotent and independent of vendor download
-    # availability. Upgrade Homebrew packages explicitly instead.
-    onActivation.autoUpdate = false;
-    onActivation.upgrade = false;
+    # Refresh and upgrade Homebrew packages on rebuild, including casks that
+    # have their own updater or don't declare a fixed version.
+    onActivation.autoUpdate = true;
+    onActivation.upgrade = true;
+    greedyCasks = true;
   };
 }
