@@ -42,18 +42,25 @@ Why: in Theo's UI hill climb, scores for unchanged screenshots moved by almost
 a point, and adding reference apps moved a 9 to a 7.4. Judges that knew the
 target score may have drifted toward it.
 
-### 4. Separate passes
+### 4. One finder pass over a capture matrix; interaction separate
 
-**Decided.**
+**Proposal** (Nov 7; replaces four separate passes). Static look, states and
+roles are parameters of one capture, not separate passes: page × role ×
+viewport × theme × state. Whether an inset, an empty state or a message is
+wrong depends on the content, the data state and who is looking. So one finder
+judges one capture, with that role's job stories in hand.
 
-- **Static look:** per screen, viewport and theme. Cheapest; runs most often.
-- **States:** the same screen forced into loading, empty, error and long
-  content.
-- **Interaction:** per component, not per screen. Resizing, safe triangles,
-  focus return and hover intent cannot be seen in a still. **The owner
-  evaluates this pass by hand for now** (Nov 6): the failure modes are
-  conventional enough to script, but the judgment is not worth automating yet.
-- **Roles and tasks:** per role, from job stories (decision 8).
+Prune the matrix:
+
+- Capture a role only where its DOM differs from another role's.
+- Spot-check themes.
+- Force loading, empty and error only where the page loads data.
+- Capture shared screens (error page, app shell) once, not once per route.
+
+**Interaction** stays separate: resizing, safe triangles, focus return and
+hover intent cannot be seen in a still. The owner evaluates it by hand for now
+(Nov 6). The failure modes are conventional enough to script, but the judgment
+is not worth automating yet.
 
 ### 5. Text first for geometry
 
@@ -130,6 +137,66 @@ missed the inset bug with them loaded. In `ia-app`, `.impeccable.md` became
 
 **Open:** `npx impeccable detect` as a free floor, only if the eval shows it
 adds catches. It needs no skills installed.
+
+### 11. Find by page, fix by owner
+
+**Proposal** (Nov 7). Pages are the unit for finding, since they can be
+captured. They are the wrong unit for fixing, since most defects live in shared
+things: the error page, the shell, Panel, Tooltip.
+
+1. **Find:** cheap models, one per capture, in parallel. Finders report and
+   never propose code, so several cannot conflict over a shared page.
+2. **Group:** merge findings by the component or primitive that rendered the
+   element. One defect seen through five routes becomes one item with five
+   pieces of evidence.
+3. **Fix:** a mid-tier model per group, not per page. Fixers run one at a time
+   at first, so two agents never edit the same file.
+4. **Re-check:** re-capture every page that uses what changed, from the import
+   graph, not just the page where the defect was found.
+
+The group step doubles as the primitive signal: a defect under one primitive
+across several callsites is probably the primitive's. The Oct 22 audit primer
+used the same rule (recurs at three or more callsites → primitive level).
+
+### 12. One skill with role files
+
+**Proposal** (Nov 7). `SKILL.md` is the orchestrator: plan captures, dispatch
+finders, group, dispatch fixers, re-check. `finder.md` (cheap model: one
+capture in, structured findings out) and `fixer.md` (mid model: one group in,
+a fix or an escalation out) are files the orchestrator tells each subagent to
+read. That works for Claude subagents and Codex delegates alike.
+
+Why not three skills: every installed skill's description loads into every
+session.
+
+### 13. Finders locate; fixers decide the level
+
+**Proposal** (Nov 7). The finder reports where a defect is and which component
+rendered it, plus a hunch about its level. It does not decide. Text overflow
+shows why: it can come from a callsite (a flex child missing `min-width: 0`),
+from content (a raw ID where a name belongs), or from the primitive (no
+truncation). A screenshot can't tell these apart.
+
+The fixer chooses among four kinds, all seen in `ia-app`:
+
+- **Primitive defect:** Tooltip's `data-state` overwrote Toggle's pressed
+  state; DatePicker's popover stayed open after a pick (5 callsites).
+- **Callsite misuse:** a labeled control inside an icon-only Button, whose
+  selector enlarged the chevron.
+- **Bespoke instead of a primitive:** six dashboard widgets hand-rolled tile
+  rows instead of using CardGroup.
+- **Missing primitive API:** CardGroup's corner options could not express the
+  inset shape.
+
+Before changing a primitive, the fixer checks every callsite and the job
+stories of the people who reach them. A missing API is escalated to the owner
+before any code is written, as `ia-app` `AGENTS.md` already requires.
+
+**Gap:** only 24 of `ia-app`'s 103 primitives emit `data-slot`. Button,
+Dialog, Badge and most others don't, so the page alone often can't say which
+primitive rendered an element. Either add `data-slot` to the rest (the shadcn
+convention) or read component names from React in dev builds (as react-grab
+does).
 
 ## Evals
 
