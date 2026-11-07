@@ -150,6 +150,8 @@ remain available as an older static set.
 
 ## Open questions
 
+- **Waiting on:** the owner gives the eval pages once the `ia-app` branch
+  `fix/ui-library-reliability` is done (asked Nov 6).
 - Start IA-app-specific or generic?
 - How good is Haiku 5.5 or Luna 6 vision on geometry? Unknown until a baseline.
 - Which pages first?
