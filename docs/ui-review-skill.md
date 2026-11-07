@@ -50,7 +50,9 @@ target score may have drifted toward it.
 - **States:** the same screen forced into loading, empty, error and long
   content.
 - **Interaction:** per component, not per screen. Resizing, safe triangles,
-  focus return and hover intent cannot be seen in a still.
+  focus return and hover intent cannot be seen in a still. **The owner
+  evaluates this pass by hand for now** (Nov 6): the failure modes are
+  conventional enough to script, but the judgment is not worth automating yet.
 - **Roles and tasks:** per role, from job stories (decision 8).
 
 ### 5. Text first for geometry
@@ -76,7 +78,8 @@ survive as single probes.
 
 ### 6. Interactions as an inventory plus probes
 
-**Proposal.**
+**Deferred** (Nov 6; the owner evaluates interactions by hand). Kept here for
+when that changes.
 
 - **Capability inventory:** for each component, its kind, what renders it, and
   what it can do (resizable, collapsible, persisted, truncated labels).
@@ -95,8 +98,9 @@ the owner's examples.
 
 ### 7. Component provenance from the running app
 
-**Proposal.** Map an element to its React component and file in dev builds
-with react-grab or bippy, rather than having the model read source.
+**Deferred** with decision 6. Map an element to its React component and file
+in dev builds with react-grab or bippy, rather than having the model read
+source.
 
 ### 8. Personas as fixed job stories
 
@@ -106,7 +110,8 @@ propose a missing row for the owner to accept.
 
 Why: cheap models invent generic personas, regenerated personas make runs
 incomparable, and the project context is exactly what the model lacks. Start
-from the Users section of `ia-app/.impeccable.md`.
+from the Users section of `ia-app/agent-notes/design-context.md` (formerly
+`.impeccable.md`).
 
 ### 9. Neutral baseline capture
 
@@ -115,32 +120,39 @@ blur focus. Capture hover and focus states separately and on purpose.
 
 Why: a hover state on the announcement list distracted Sol from the inset bug.
 
-### 10. Impeccable detect as a free floor
+### 10. Impeccable
 
-**Open.** Use `npx impeccable detect` only if the eval shows it adds catches.
-It needs no skills installed.
+**Decided** (Nov 6): the 21 Impeccable skills were deleted from
+`~/.codex/skills`. They were unmanaged copies from March 2026, critique's top
+priority is landing-page slop, 17 of them load frontend-design first, and Sol
+missed the inset bug with them loaded. In `ia-app`, `.impeccable.md` became
+`agent-notes/design-context.md` (branch `tooling/root-cleanup`).
+
+**Open:** `npx impeccable detect` as a free floor, only if the eval shows it
+adds catches. It needs no skills installed.
 
 ## Evals
 
-One folder per case: route, role, viewport, theme, state, optional commit,
-images, and expected issues (what, where, primitive or callsite).
+**Decided** (Nov 6): test on real pages from the current `ia-app` `main`, not
+replayed commits or planted fixtures.
 
-- **Seed (static):** the 13 UI Principles screenshots
-  (`~/.t3/userdata/attachments/03c046b3-*`) with the owner's messages, the
-  owner's calendar and audit-log markups, and audit P0/P1 visual findings with
-  their before-shots.
-- **Replay (live):** known bugs tied to fix commits. Check out the commit
-  before the fix and capture. The fix diff is ground truth for primitive vs
-  callsite.
-- **Fixtures:** small HTML pages with planted interaction bugs.
-- **New captures:** unlabeled at first. The owner marks each finding real or
-  noise, and marked findings become cases.
+1. The owner picks pages, with role, viewport and theme.
+2. The prebuilt capture command takes static screenshots, which also tests
+   that command.
+3. The owner writes critiques before seeing any model output, so model
+   findings don't anchor the ground truth.
+4. Cheap models run against the same captures; score recall on the owner's
+   critiques and count noise.
+
+Findings the owner marks real later become further cases. The 13 UI Principles
+screenshots (`~/.t3/userdata/attachments/03c046b3-*`) and the owner's markups
+remain available as an older static set.
 
 ## Open questions
 
 - Start IA-app-specific or generic?
 - How good is Haiku 5.5 or Luna 6 vision on geometry? Unknown until a baseline.
-- Which pass first? Leaning static, then interaction with fixtures.
+- Which pages first?
 
 ## Evidence
 
