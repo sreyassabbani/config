@@ -74,7 +74,6 @@
       "notion-calendar"
       "anki"
       "antigravity"
-      "visual-studio-code"
       "codex"
       "chatgpt"
       "the-unarchiver"
