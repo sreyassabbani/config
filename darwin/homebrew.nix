@@ -44,7 +44,12 @@
     ];
 
     casks = [
-      "onedrive"
+      # OneDrive's own updater runs ahead of the cask; a greedy upgrade put the
+      # older cask back (Nov 6) and the older app refused the newer sync data.
+      {
+        name = "onedrive";
+        greedy = false;
+      }
       "opencode-desktop"
       # "gcloud-cli"
       "blender"
