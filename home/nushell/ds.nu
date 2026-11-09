@@ -6,7 +6,7 @@ def --env ds [kind?: string] {
     return
   }
 
-  let templates = ($nu.home-path | path join "Library" "Application Support" "nushell" "lib" "templates")
+  let templates = ($nu.home-dir | path join "Library" "Application Support" "nushell" "lib" "templates")
 
   if ($mode == "default" or $mode == "dev") {
     if ("flake.nix" | path exists) {

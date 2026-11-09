@@ -1,5 +1,5 @@
 $env.PROMPT_COMMAND = {||
-  let current = ($env.PWD | str replace $nu.home-path "~")
+  let current = ($env.PWD | str replace $nu.home-dir "~")
   let location = if $current == "~" {
     ""
   } else {
