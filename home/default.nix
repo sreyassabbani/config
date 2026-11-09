@@ -20,6 +20,7 @@
     ./ghostty.nix
     ./hammerspoon.nix
     ./anki-blue.nix
+    ./anki.nix
     ./rex.nix
     ./zsh.nix
   ];

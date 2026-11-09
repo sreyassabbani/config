@@ -1,0 +1,40 @@
+{
+  "Basic": {
+    "css": ["shared.css"],
+    "templates": {
+      "Card 1": ["basic.front.html", "basic.back.html"]
+    }
+  },
+  "Basic (and reversed card)": {
+    "css": ["shared.css"],
+    "templates": {
+      "Card 1": ["basic.front.html", "basic.back.html"],
+      "Card 2": ["reverse.front.html", "reverse.back.html"]
+    }
+  },
+  "Basic (optional reversed card)": {
+    "css": ["shared.css"],
+    "templates": {
+      "Card 1": ["basic.front.html", "basic.back.html"],
+      "Card 2": ["optional-reverse.front.html", "reverse.back.html"]
+    }
+  },
+  "Basic (type in the answer)": {
+    "css": ["shared.css"],
+    "templates": {
+      "Card 1": ["type-in.front.html", "type-in.back.html"]
+    }
+  },
+  "Cloze": {
+    "css": ["shared.css"],
+    "templates": {
+      "Cloze": ["cloze.front.html", "cloze.back.html"]
+    }
+  },
+  "English Word": {
+    "css": ["shared.css", "word.css"],
+    "templates": {
+      "Card 1": ["word.front.html", "word.back.html"]
+    }
+  }
+}

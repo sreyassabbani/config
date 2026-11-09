@@ -16,6 +16,7 @@ Of the many things this repo configures, the following are important notes:
 - Catppuccin Frappe everywhere possible
 - [Anki on the tailnet](home/anki-blue.nix): a web front end for my Anki collection at
   `https://blue.tailf5907c.ts.net`, synced through AnkiWeb (code in `~/workflow/anki-blue`)
+  - [card templates and CSS](home/anki/README.md) for my note types, applied on switch
 - [Agent instructions](home/agents/instructions.md) shared by Codex, Claude Code,
   OpenCode, and Gemini CLI; [T3 preferences](home/t3code.nix) merged on activation
 - MacBook setup

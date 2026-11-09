@@ -1,0 +1,149 @@
+/*
+ * Shared by every note type in notetypes.json. Written for phones first
+ * (AnkiWeb, AnkiMobile, AnkiDroid), then desktop. Rules of thumb:
+ *   - nothing gets a fixed width or a percentage of the screen; text is
+ *     capped by measure (`max-width` in em) and otherwise fills the screen
+ *   - long words, images, tables and math shrink or scroll instead of
+ *     widening the page (that is what zoomed AnkiWeb out before)
+ *   - the question sits at the same spot on both sides, so revealing the
+ *     answer never makes it jump
+ */
+
+.card {
+  --text: #1b1b1f;
+  --muted: #62646e;
+  --rule: #d6d7dc;
+  --bg: #ffffff;
+  --accent: #1d4ed8;
+  --accent-bg: #e6edfd;
+
+  margin: 0;
+  padding: clamp(20px, 9vh, 72px) 16px 40px;
+  box-sizing: border-box;
+
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", "TeX Gyre Pagella", Georgia, serif;
+  font-size: clamp(20px, 2.8vw + 10px, 26px);
+  line-height: 1.45;
+  color: var(--text);
+  background-color: var(--bg);
+  text-align: center;
+  overflow-wrap: anywhere;
+  -webkit-text-size-adjust: 100%;
+}
+
+.nightMode.card,
+.nightMode .card,
+.night_mode.card,
+.night_mode .card {
+  --text: #e4e5ea;
+  --muted: #a2a5b1;
+  --rule: #3b3d45;
+  --bg: #1f2024;
+  --accent: #93b4ff;
+  --accent-bg: rgba(147, 180, 255, 0.16);
+}
+
+.qa {
+  max-width: 32em;
+  margin: 0 auto;
+}
+
+.prompt,
+.answer,
+.extra {
+  text-wrap: pretty;
+}
+
+.qa > hr {
+  width: min(100%, 10em);
+  margin: 0.9em auto;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.extra {
+  font-size: 0.82em;
+  color: var(--muted);
+}
+
+/* Things pasted into fields. */
+
+.qa img,
+.qa video,
+.qa svg,
+.qa canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.qa table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 0.5em auto;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.qa ul,
+.qa ol {
+  display: inline-block;
+  margin: 0.3em auto;
+  padding-left: 1.2em;
+  text-align: left;
+}
+
+.qa pre {
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.qa code,
+.qa pre {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.85em;
+}
+
+.qa mjx-container[display="true"],
+.qa .MathJax_Display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Cloze: the blank and the revealed answer share one look, so your eye
+   lands on the same spot when the card flips. */
+
+.cloze {
+  padding: 0 0.3em;
+  border-radius: 0.3em;
+  font-weight: 700;
+  color: var(--accent);
+  background-color: var(--accent-bg);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Type-in answers. */
+
+.type-in {
+  margin-top: 0.8em;
+}
+
+.type-in input {
+  width: 100%;
+  max-width: 20em;
+  box-sizing: border-box;
+  padding: 0.35em 0.5em;
+  font: inherit;
+  font-size: max(16px, 0.85em); /* 16px keeps iOS from zooming in on focus */
+  text-align: center;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 0.4em;
+}
+
+.type-in code {
+  font-size: 0.8em;
+}

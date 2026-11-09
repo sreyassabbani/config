@@ -1,0 +1,26 @@
+.word {
+  font-size: 1.15em;
+}
+
+.word-detail {
+  max-width: 26em;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.word-detail p {
+  margin: 0 0 0.6em;
+}
+
+.word-detail .example {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.word-detail .label {
+  margin-right: 0.3em;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
