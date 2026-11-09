@@ -342,6 +342,19 @@ Results:
 - **Size and cost:** 21–27 findings per run. `suspect` was used 2–5 times per
   run. Haiku took 131–186 s and 28–40k output tokens per run.
 
+**Luna 6** (Nov 9, medium reasoning; three runs on each brief, same
+captures):
+
+- None of the six reported the short columns. All six reported the setup pill,
+  and most said it covers the content.
+- 2–6 findings per run, against Haiku's 21–27. Each run took 27–45 s, 3 model
+  requests and 1–2k output tokens, with almost no reasoning. That didn't
+  move the Codex meter.
+- Two runs built a contact sheet with PIL in `/tmp`, and two opened the
+  captures in Preview on the owner's screen, despite "run no commands except
+  to view the images". The inputs stayed sealed, but a finder with a shell
+  will use it. Luna's image-viewing tool is enough by itself.
+
 The edits were written knowing this defect, so this shows Haiku can reach the
 judgment when the brief doesn't excuse it. It doesn't show the edits help
 elsewhere; that needs defects nobody tuned against.
