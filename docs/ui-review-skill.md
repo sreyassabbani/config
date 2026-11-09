@@ -354,6 +354,19 @@ captures):
   captures in Preview on the owner's screen, despite "run no commands except
   to view the images". The inputs stayed sealed, but a finder with a shell
   will use it. Luna's image-viewing tool is enough by itself.
+- More effort didn't fix it. Three runs each at `high` and `xhigh`, revised
+  brief, plus "view the images only with your image-viewing tool; run no shell
+  commands":
+  - None reported the short columns. Two xhigh runs came closest: "the
+    widget occupies a band across the bottom … a row is cut off at its edge".
+    They blamed the pill, which is the wrong-cause miss, and used no `suspect`.
+  - `high` reasoned no more than `medium` (0–731 tokens). `xhigh` reasoned
+    1.3–4.4k and took 62–101 s. Haiku reasoned about ten times as much.
+  - Both effort levels together moved the Codex 5-hour meter by 1%.
+  - No shell this time, but two xhigh runs called Computer Use, and one tried
+    to open Preview on the owner's desktop. That call timed out, and no
+    screen was read. A finder's sealing has to come from the harness; the
+    brief alone doesn't hold it.
 
 The edits were written knowing this defect, so this shows Haiku can reach the
 judgment when the brief doesn't excuse it. It doesn't show the edits help
