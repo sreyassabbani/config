@@ -19,24 +19,22 @@ ANKI2 = Path.home() / "Library/Application Support/Anki2"
 
 
 def anki_running() -> bool:
-    return subprocess.run(["pgrep", "-xq", "Anki"]).returncode == 0
+    return subprocess.run(["/usr/bin/pgrep", "-xq", "Anki"]).returncode == 0
 
 
 def quit_anki() -> None:
-    # Same as ⌘Q: Anki saves, syncs if set to, and closes the collection.
-    quit = subprocess.run(
-        ["osascript", "-e", 'quit app "Anki"'], capture_output=True, text=True
-    )
-    if quit.returncode != 0:
-        sys.exit(
-            "anki-notetypes: Anki refused to quit (a dialog or editor window is\n"
-            f"probably open: {quit.stderr.strip()}). Close it and try again."
-        )
+    # Anki answers AppleScript's `quit` with "User canceled", but it handles
+    # SIGTERM like ⌘Q: it closes its windows, syncs if set to, and closes the
+    # collection.
+    subprocess.run(["/usr/bin/pkill", "-TERM", "-x", "Anki"], check=False)
     for _ in range(120):
         if not anki_running():
             return
         time.sleep(0.5)
-    sys.exit("anki-notetypes: Anki did not quit within a minute; nothing changed")
+    sys.exit(
+        "anki-notetypes: Anki did not quit within a minute (an editor window\n"
+        "may be asking about unsaved changes); nothing changed"
+    )
 
 
 def default_collection() -> Path:
@@ -147,7 +145,7 @@ def main() -> None:
         print(f"anki-notetypes: {verb} {', '.join(changed)}" if changed else "anki-notetypes: up to date")
 
     if reopen:
-        subprocess.run(["open", "-a", "Anki"], check=False)
+        subprocess.run(["/usr/bin/open", "-a", "Anki"], check=False)
 
 
 if __name__ == "__main__":
