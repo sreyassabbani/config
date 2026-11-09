@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# Read the Claude and Codex plan meters (5-hour and weekly windows), so an
+# orchestrator can take a reading before and after a batch of subagent runs.
+#
+#   plan-usage                 current readings as a table
+#   plan-usage --json          current readings as JSON; save one before a batch
+#   plan-usage --since FILE    current readings, with the change since FILE
+#
+# Claude: the usage endpoint behind /usage, called with the Claude Code login
+# from the macOS Keychain. It is undocumented and may change. The token goes to
+# curl on stdin, never into arguments, files or output.
+# Codex: the newest rate-limit record in ~/.codex/sessions. Codex logs one after
+# each turn, so a reading is as fresh as the last Codex turn on this machine.
+set -uo pipefail
+
+mode=table since=
+case "${1:-}" in
+  "") ;;
+  --json) mode=json ;;
+  --since)
+    since=${2:-}
+    [ -r "$since" ] || { echo "plan-usage: can't read '${since}'" >&2; exit 2; } ;;
+  -h | --help) sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  *) echo "plan-usage: unknown argument '$1' (try --help)" >&2; exit 2 ;;
+esac
+
+now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+claude() {
+  local out code body
+  out=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null |
+    jq -r '"header = \"Authorization: Bearer \(.claudeAiOauth.accessToken)\""' 2>/dev/null |
+    curl -sS -m 15 -K - -w '\n%{http_code}' -H 'anthropic-beta: oauth-2025-04-20' \
+      https://api.anthropic.com/api/oauth/usage 2>/dev/null)
+  code=${out##*$'\n'} body=${out%$'\n'*}
+  if [ "$code" != 200 ]; then
+    local why="HTTP ${code:-none}"
+    [ "$code" = 401 ] && why="$why: no Claude Code login, or it expired (run claude once)"
+    jq -n --arg e "claude: $why" '{meters: [], errors: [$e]}'
+    return
+  fi
+  jq --arg now "$now" '{errors: [], meters: [to_entries[]
+    | select((.key == "five_hour" or (.key | startswith("seven_day")))
+        and (.value | type) == "object" and .value.utilization != null)
+    | {plan: "claude",
+       window: (if .key == "five_hour" then "5h" elif .key == "seven_day" then "week"
+                else "week (" + (.key | ltrimstr("seven_day_")) + ")" end),
+       percent: .value.utilization,
+       resets_at: (.value.resets_at[0:19] + "Z"),
+       as_of: $now}]}' <<<"$body"
+}
+
+codex() {
+  local dir="$HOME/.codex/sessions"
+  [ -d "$dir" ] || { jq -n '{meters: [], errors: ["codex: no ~/.codex/sessions"]}'; return; }
+  find "$dir" -name '*.jsonl' -mtime -8 -print0 |
+    xargs -0 grep -h '"rate_limits":{' 2>/dev/null |
+    jq -cR 'fromjson? | select(.payload.type? == "token_count" and .payload.rate_limits != null)
+      | .payload.rate_limits as $l
+      | select($l.primary != null or $l.secondary != null)
+      | {t: .timestamp, l: $l}' |
+    jq -s 'group_by(.l.limit_id) | map(max_by(.t)) | {errors: (if length == 0
+      then ["codex: no reading in the last 8 days"] else [] end), meters: [.[]
+      | .t as $t | .l as $l | ($l.primary, $l.secondary) | select(. != null)
+      | {plan: (if $l.limit_id == "codex" then "codex" else "codex/" + $l.limit_id end),
+         window: (if .window_minutes == 300 then "5h" elif .window_minutes == 10080 then "week"
+                  else "\(.window_minutes)m" end),
+         percent: .used_percent,
+         resets_at: (.resets_at | todate),
+         as_of: ($t[0:19] + "Z")}]}'
+}
+
+reading=$( { claude; codex; } | jq -s --arg now "$now" \
+  '{taken_at: $now, meters: (map(.meters) | add), errors: (map(.errors) | add)}')
+
+if [ "$mode" = json ]; then
+  echo "$reading"
+  exit 0
+fi
+
+old='{"meters": []}'
+[ -n "$since" ] && old=$(cat "$since")
+
+jq -r --argjson old "$old" --arg since "$since" '
+  def pad(n): tostring as $s | $s + ([range(0; [n - ($s | length), 0] | max)] | map(" ") | join(""));
+  def epoch: fromdateiso8601;
+  def local: epoch | strflocaltime("%a %H:%M");
+  .taken_at as $now
+  | (["plan", "window", "used", "change", "resets", "read at"]) as $head
+  | ([.meters[] | . as $m
+      | ($old.meters | map(select(.plan == $m.plan and .window == $m.window)) | first) as $o
+      | [ $m.plan, $m.window, "\($m.percent | floor)%",
+          (if $since == "" then null
+           elif $o == null then "new"
+           elif (($m.resets_at | epoch) - ($o.resets_at | epoch) | fabs) > 120 then "window reset"
+           elif $m.as_of == $o.as_of and $m.plan != "claude" then "no newer reading"
+           else ($m.percent - $o.percent | floor) as $d | (if $d >= 0 then "+\($d)" else "\($d)" end)
+           end),
+          (if ($m.resets_at | epoch) < ($now | epoch) then "already reset" else ($m.resets_at | local) end),
+          (if $m.as_of == $now then "now" else ($m.as_of | local) end) ]
+      | if $since == "" then del(.[3]) else . end]) as $rows
+  | (if $since == "" then $head | del(.[3]) else $head end) as $head
+  | ([$head] + $rows) as $all
+  | [range(0; $head | length) as $i | $all | map(.[$i] | length) | max] as $w
+  | ($all[] | [range(0; length) as $i | .[$i] | pad($w[$i] + 2)] | join("") | sub(" +$"; "")),
+    (.errors[] | "! " + .),
+    "",
+    "Whole percents: a batch that uses under 1% reads as +0.",
+    "Each meter counts every session on the account; take readings with nothing else running."
+' <<<"$reading"

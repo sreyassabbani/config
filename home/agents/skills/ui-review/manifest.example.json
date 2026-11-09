@@ -1,0 +1,65 @@
+{
+  "out": "runs/gwc-r2",
+  "app": {
+    "base": "http://localhost:3000",
+    "root": "/Users/sreysus/workflow/ia-app",
+    "login": {
+      "path": "/login",
+      "user": "#uniqueId",
+      "password": "#password"
+    },
+    "passwordFrom": {
+      "file": "apps/convex/src/seed.ts",
+      "pattern": "LOCAL_DEMO_PASSWORD\\s*=\\s*\"([^\"]+)\""
+    },
+    "themeKey": "theme"
+  },
+  "theme": "dark",
+  "colorScheme": "dark",
+  "identity": [
+    "account menu$",
+    "\\b\\d+ online$"
+  ],
+  "shell": {
+    "desk": 256
+  },
+  "viewports": {
+    "desk": "1680x1020",
+    "phone": "phone"
+  },
+  "pages": {
+    "1-overview": "/clubs/{club}",
+    "2-people": "/clubs/{club}/people",
+    "3-settings": "/clubs/{club}/settings",
+    "4-chat": "/clubs/{club}/channels/{chat}",
+    "5-channel-settings": "/clubs/{club}/settings/channels/{openChannel}",
+    "6-channels": "/clubs/{club}/settings/channels"
+  },
+  "entities": {
+    "gwc": {
+      "name": "Girls Who Code",
+      "club": "pn7cppvygpjd5sjpvj3pzcgmvh8hkf4e",
+      "chat": "m97cmnwc02twn9yjrxwwz4avw98hkq08",
+      "openChannel": "m9771pmp4wgrf5cxwk0hbyx19s8hkqsc"
+    }
+  },
+  "viewers": [
+    {
+      "label": "super-admin",
+      "id": "SUPER001",
+      "entity": "gwc",
+      "viewports": [
+        "desk"
+      ]
+    },
+    {
+      "label": "student-member",
+      "id": "STU006",
+      "entity": "gwc",
+      "viewports": [
+        "desk",
+        "phone"
+      ]
+    }
+  ]
+}
