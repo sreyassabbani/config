@@ -4,15 +4,12 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks."github.com" = {
-      hostname = "github.com";
-      user = "git";
-      identityFile = "~/.ssh/id_ed25519";
-
-      extraOptions = {
-        AddKeysToAgent = "yes";
-        UseKeychain = "yes";
-      };
+    settings."github.com" = {
+      HostName = "github.com";
+      User = "git";
+      IdentityFile = "~/.ssh/id_ed25519";
+      AddKeysToAgent = "yes";
+      UseKeychain = "yes";
     };
   };
 }

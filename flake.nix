@@ -135,7 +135,7 @@
       ########################################
       # Formatter
       ########################################
-      formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+      formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt;
 
       packages.${system} = {
         tt = inputs.nixpkgs.legacyPackages.${system}.callPackage ./pkgs/tt.nix {

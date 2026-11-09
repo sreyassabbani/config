@@ -30,7 +30,7 @@
     typescript
     typescript-language-server
     (callPackage ../pkgs/pnpm.nix { })
-    nixfmt-rfc-style
+    nixfmt
     nixd
     zoxide
     fzf
