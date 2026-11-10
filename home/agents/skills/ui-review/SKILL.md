@@ -61,9 +61,27 @@ repo. Once per machine, run `npm install --prefix scripts`. If Chromium is missi
 
 ## 4. Write the briefs
 
-Fill `finder-brief.md` once per finder lens: the viewer, their reason for each
-page, and the captures. Keep its principles, scope rules and output format.
-Never add severity or confidence.
+Complete `product-context.md` once per domain/viewer and inline it in
+`finder-brief.md`. Distinguish sourced facts, intended behavior, scenario
+assumptions and unknowns; pin sources to the captured revision when possible.
+Explain unfamiliar objects, relationships, defaults and permission combinations
+in ordinary language. Supply the user's task and familiarity without inventing
+usage analytics. Keep previous findings and owner annotations out of discovery
+inputs. Context gathering is real orchestrator work: record its time and usage.
+
+The brief distinguishes four evidence needs: visual presentation from images;
+workflow/hierarchy from the person's job; conceptual simplification from the
+product contract; implementation ownership from source and callsite inspection.
+Image-only reviewers handle the first three with the packet and make a bounded
+handoff for the fourth. They may propose design directions with tradeoffs;
+product questions remain separate from supported problems. Avoid severity and
+confidence scores. Do not turn every consistency difference into a defect or
+delete explanations that communicate otherwise invisible rules.
+
+For an independent capable review, use `direct-review-brief.md`: the same packet
+and images, full relevant product docs, and selective read-only source access.
+Do not feed it the cheap reviews. This compares practical workflows with
+different evidence access, not model ability with every variable held fixed.
 
 For Codex, keep the `view_image`-only tool line. For another harness, substitute
 its actual image reader (for Claude, `Read` on the named images only). If a tool
@@ -90,6 +108,14 @@ images. Tool discovery is not image viewing.
   - Haiku: `claudeAgent`, `claude-haiku-5-5`, effort `medium`.
   - Luna: `codex`, `gpt-6-luna`, reasoningEffort `medium`.
   - Run each arm three times.
+- The owner may specify another model/effort or one direct comparison run;
+  honor that scope. The model tiers are experiments, not required architecture.
+- Record task bytes/words, provider token usage/cache accounting, model effort,
+  tools and wall time. Separate initial packet authoring, reusable domain
+  preparation, per-batch preparation, review/merging and child execution. Input
+  usage includes harness context and image costs, not just the written brief.
+  Report subscription meter changes as shared-account observations, not child
+  prices. Do not invent dollar conversions from unavailable model pricing.
 - **Take meter readings around the batch:**
 
   ```sh
@@ -122,6 +148,9 @@ node scripts/audit.mjs RUN/input-<arm> --since <dispatch time> --save RUN/findin
   reasoning, not the raw reasoning.
 - Read every run's stats. A run that fails doesn't count toward the compliant
   sample. Preserve its output and mark it excluded; do not silently replace it.
+- The image-only audit applies to screenshot workers. A direct source-enabled
+  review needs a separate audit against its declared read-only paths and
+  operations; source reads are expected, not image-only policy violations.
 
 ## 7. Merge without losing words
 

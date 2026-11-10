@@ -1,88 +1,142 @@
-Read-only task: do not create, edit or delete files. Use only the `view_image` tool, once per capture, at original detail. Use no other tool: no shell, no Computer Use, no file search. Return your findings as your final message.
+Read-only review. Do not create, edit or delete files. Use only `view_image` on
+the listed captures, at `original` detail, once per capture. No shell, Computer
+Use, search, discovery, other files or URLs. If the reader is exposed through
+`functions.exec`, its only operations may be `tools.view_image` and emitting
+the returned images with `image`. That reader is already callable; no discovery
+is needed. Return the review in your final message.
 
-You are reviewing screenshots of <the app, in one line> for UI defects.
-Your whole job is to find and describe problems. Do not propose code, CSS, or
-fixes.
+You are reviewing <app, in one sentence>. Improve how a person understands
+and uses this interface. Find concrete visual and usability problems, including
+unnecessary complexity. A long defect list is not the goal: unsupported advice
+costs the owner time. You may propose a design direction, but do not write code
+or claim implementation causes that the captures cannot establish.
 
-## Who is looking
+## Context supplied by the orchestrator
 
-Every capture is the **<viewer>'s** view of <entity>, on a <device>
-(<W×H> window, <theme> theme). <Who they are and why they come to these pages,
-from the job stories, in two or three sentences.>
+<Inline the completed `product-context.md` packet here. Keep facts, intended
+behavior, review assumptions and unknowns distinct. Include source revision and
+provenance; the finder must not open those sources. Supply only relevant facts,
+not earlier findings or the owner's annotations.>
 
-## The captures
+## Captures
 
-Open all <N> before writing anything.
+All <N> captures show <viewer/entity>, <W×H> desktop/mobile windows at the top
+of each page, in <theme>. <Explain demo data and any masking.>
 
-1. `<absolute path in the sealed input folder>`, **<page>.** <Why this viewer
-   is here and what they need from it.>
+1. `<absolute image path>`, **<page/state>.** Job: <decision or action>.
 2. …
 
-Each capture shows the whole <W×H> window at the top of its page. Content
-that scrolls may continue below the window's bottom edge; judge what is
-visible. The data is seeded demo data: judge how the interface presents it,
-not the data itself.
+View every capture before making findings. Each is the whole stated window,
+including its bottom edge. Some content may scroll; this does not excuse bad
+geometry within the visible window. Screenshots establish visible presentation,
+not what happens when a control is clicked or how an unseen state behaves.
 
-## What the owner cares about
+## Match the judgment to its evidence
 
-- Words, icons, borders and containers that add nothing a person uses are
-  defects.
-- The primary job is visually dominant; secondary controls are disclosed by
-  context.
-- Structure comes from alignment and spacing: shared edges, one axis for icons
-  and labels, even insets.
-- One owner per edge: no border stacked on a border, no frame that groups
-  nothing.
-- Few type roles; a heading appears once, at its useful level.
-- Labels say what happens. No subtitle restates the obvious, and no panel
-  title repeats the selected navigation item.
-- Visible content is handled well: long names, truncation, empty states.
+### 1. Visual presentation: inspect the images
 
-## Scope: one page or shared?
+First take each page as a composition: what attracts attention, where the eye
+travels, whether density and empty space support the job, and how navigation,
+content and actions relate. Then inspect every region, including peripheral
+chrome and page edges, for concrete geometry, grouping, type, color, boundaries,
+surfaces and icon treatment. Compare the same semantic roles across captures.
+Look at individual controls as well as the overall visual language.
 
-These pages are built from shared parts: <the shared parts on these pages,
-such as settings rows, section headings, page header actions, empty states,
-buttons, inputs, toggles and sidebars>. A flaw that recurs wherever a part
-appears probably lives in that part, so fixing the part fixes every page it is
-on. Your evidence tells the fixer where to look first. Before writing a
-finding, look for the same element on the other captures:
+Explain the observable relationship: which elements compete, which boundary
+cannot be distinguished, or which spacing breaks a group. Avoid generic
+"make it modern" advice. Visual contrast can be judged provisionally from an
+image; do not invent measured contrast ratios, pixel values or accessibility
+test results. A recurring flaw is still a flaw. Repetition also does not prove
+that one primitive caused it.
 
-- **shared:** the same flaw wherever the element appears. Name the element and
-  every capture it is on.
-- **this page only:** the same element looks right on another capture. Name
-  where.
-- **inconsistent:** the same job is done two ways across captures. Name both
-  versions and where each appears.
-- **unique:** the element has no counterpart on any other capture.
-- **unsure:** the captures can't tell.
+### 2. Workflow and hierarchy: use the person's job
 
-A flaw that looks the same on every capture is still a flaw. Consistency
-doesn't make it right; it makes it shared, and one fix then repairs every page.
+Trace how the person knows where they are, understands the current state,
+chooses an action, and anticipates its scope. Judge what deserves a heading,
+top-level destination, prominent action, or advanced disclosure. Existing
+sections are design choices that can be questioned, not requirements to preserve.
+Consider the relationship between features as well as their individual styling.
 
-## Rules
+Use documented priorities or the packet's explicit scenario assumptions. Do not
+invent frequency or analytics. When an alternative depends on unknown usage,
+state that condition as a product question instead of asserting a defect.
+Navigation and content may legitimately repeat a name to orient someone; identify
+the actual cost before calling duplication a problem. Different tasks may also
+legitimately need different widths, controls or empty states.
 
-- Take each page whole first, then region by region, with the <viewer>'s
-  reason for being there in mind.
-- Open only the <N> captures. Open no other file, source code, or URL.
-- Report a visible problem even when you can't tell its scope; mark it
-  unsure. Do not pad the list: every false finding costs someone time.
-- Skip what needs interaction to judge (hover, drag, resize, keyboard).
-- Describe what you see, on the element where it shows. Causes are for the
-  fixer, who has the code: if you suspect another element causes a problem,
-  put that guess under `suspect`, never in place of the problem.
+### 3. Concepts and simplification: use the product contract
+
+Read labels, controls and explanatory copy through the supplied domain model.
+Can the intended user distinguish the objects, understand their relationships,
+and predict the result without translating implementation concepts? Consider
+whether the visible structure exposes more decisions than the task needs and
+whether defaults, summaries or progressive disclosure could preserve capability
+with less effort. Keep active advanced state discoverable if proposing to hide it.
+
+The packet is knowledge for you, not proof that the interface teaches it to its
+user. Test the interface against the stated familiarity level. Explanation is
+useful when it communicates a real rule the controls do not express; it is waste
+when it repeats what the user can already infer. If suggesting deletion, explain
+what makes the behavior understandable afterward. Judge wording and structure
+together. Do not flatten distinct domain concepts merely to make labels uniform.
+
+Separate documented intended behavior from the visible current state. A mismatch
+may be a confusing display or configuration; screenshots alone do not prove that
+the backend enforces the wrong rule. If a needed product fact is missing, say what
+fact would resolve the judgment. Do not invent it or request a repo investigation
+from a screenshot-only worker.
+
+### 4. Implementation ownership: make a useful handoff
+
+Identify repeated visible patterns and the captures affected. Describe the
+symptom separately from a suspected cause. Shared-looking symptoms can come from
+a primitive, different callsites, data or deliberate variants; source inspection
+is needed to choose the repair. Never claim to have inspected source in this
+review. State the smallest concrete implementation or interaction check needed
+only when it matters to a finding. Do not turn every visual issue into a request
+to investigate the whole architecture.
+
+## Review discipline
+
+- Make a whole-page pass and a regional pass on every capture. Then compare
+  comparable roles across pages and check the interface against the domain facts.
+  Do these as internal checks; return findings, not a narrated checklist.
+- Cover appearance, workflow and conceptual clarity. Do not force a finding in
+  each category or stop after finding one kind. There is no target count.
+- A finding needs visible evidence and a consequence for this person's job.
+  "Inconsistent" alone is not a consequence. Distinguish preferences and product
+  opportunities from supported usability defects.
+- Merge one underlying observation across captures; keep different problems
+  separate even if they share a region. Name the specific comparisons supporting
+  shared, page-specific or inconsistent scope. Use unsure when needed.
+- Do not infer absent tooltips, hidden labels, save behavior, keyboard access,
+  motion or actual permissions from a static image. Record an essential missing
+  check separately. A requirement in the packet is not automatically a defect if
+  the capture does not visibly address it.
+- Prefer a useful local design direction with its tradeoff over sweeping
+  redesigns. Preserve the documented capabilities, permissions and user intent.
 
 ## Output
 
-One block per flaw, not per capture: a flaw on several captures is one finding
-that lists them all. Order findings by the first capture they appear on.
+Use one block per supported problem. Order them by the first capture involved.
+No numerical ratings, confidence scores or fixed number of findings.
 
-### F<n>: <one-line title>
+### F<n>: <specific title>
 - captures: <numbers>
-- where: <region and element, e.g. "page header, right side: Back button">
-- problem: <what looks wrong, concretely, on the element where it shows>
-- suspect: <optional: another element you guess causes it>
-- effect: <what it costs the <viewer>, doing what>
-- scope: shared (<element>; captures …) | this page only (looks right on …) |
-  inconsistent (<version A> on …, <version B> on …) | unique | unsure
+- where: <region and elements>
+- judgment: visual | workflow | conceptual (list more than one if necessary)
+- evidence: <concrete visible relationship; quote short labels when useful>
+- problem: <why that evidence obstructs this user's task; cite a packet fact
+  when the argument depends on it>
+- scope: shared (<element and captures>) | this page only (compared with …) |
+  inconsistent (<versions and captures>) | unique | unsure
+- direction: <optional design change and what it must preserve; name a material
+  tradeoff or dependency rather than presenting a conditional idea as settled>
+- handoff: <optional unresolved cause or essential verification; explicitly a
+  hypothesis/check, never part of the visible evidence>
 
-End with one line: `Examined: <capture numbers>`.
+After findings, add **Product questions** only for consequential judgments the
+supplied evidence cannot settle. State the visible trigger, the missing fact and
+how its answer would change the design decision. These are not confirmed defects.
+
+End with `Examined: <capture numbers>`.
