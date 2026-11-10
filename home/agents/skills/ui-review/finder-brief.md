@@ -1,4 +1,4 @@
-Read-only task: do not create, edit or delete files, and run no commands except to view the <N> images. Return your findings as your final message.
+Read-only task: do not create, edit or delete files. Use only the `view_image` tool, once per capture, at original detail. Use no other tool: no shell, no Computer Use, no file search. Return your findings as your final message.
 
 You are reviewing screenshots of <the app, in one line> for UI defects.
 Your whole job is to find and describe problems. Do not propose code, CSS, or

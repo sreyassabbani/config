@@ -2,6 +2,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "acorn": "^8.19.0",
     "playwright-core": "1.55.1"
   }
 }

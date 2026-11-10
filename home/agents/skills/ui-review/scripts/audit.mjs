@@ -5,7 +5,8 @@
 // Searches Claude transcripts (~/.claude/projects) and Codex rollouts
 // (~/.codex/sessions) changed since --since (default: 24 hours ago).
 // --model keeps runs whose model id contains TEXT.
-// A run is sealed when every tool call names only paths inside INPUT_DIR.
+// A run passes only when every operation views an image inside INPUT_DIR.
+// --once also rejects repeated views (for briefs that require one per image).
 // --save writes DIR/NAME-<n>.md (the final message, verbatim) and
 // DIR/NAME-<n>-reasoning.md, numbering runs by start time. Both tools log a
 // summary of the model's reasoning, not the raw reasoning.
@@ -13,10 +14,11 @@ import { readFileSync, readdirSync, statSync, existsSync, mkdirSync, writeFileSy
 import { join, resolve, basename } from "node:path";
 import { homedir } from "node:os";
 import { parseArgs } from "node:util";
+import { auditCalls } from "./audit-tools.mjs";
 
 const { values: opt, positionals } = parseArgs({
   allowPositionals: true,
-  options: { since: { type: "string" }, model: { type: "string" }, save: { type: "string" }, as: { type: "string" } },
+  options: { since: { type: "string" }, model: { type: "string" }, save: { type: "string" }, as: { type: "string" }, once: { type: "boolean" } },
 });
 if (!positionals[0] || (opt.save && !opt.as)) {
   console.error("usage: audit.mjs INPUT_DIR [--since ISO] [--model TEXT] [--save DIR --as NAME]");
@@ -91,10 +93,14 @@ for (const [root, parse] of roots) {
     if (!r.tasks.some((t) => t.includes(input))) continue; // named it somewhere else, e.g. the orchestrator
     if (opt.model && !String(r.model).includes(opt.model)) continue;
     r.file = f;
-    r.leaks = r.calls.filter((c) => {
-      const paths = c.text.match(/\/[^\s"'`\\,)]+/g) ?? [];
-      return paths.length === 0 || paths.some((p) => !p.startsWith(input));
-    });
+    const audit = auditCalls(r.calls, input, { once: opt.once });
+    r.viewed = audit.viewed;
+    r.leaks = audit.violations;
+    const expected = readdirSync(input).filter(f => /\.(png|jpe?g|webp)$/i.test(f)).map(f => resolve(input, f));
+    for (const path of expected.filter(p => !r.viewed.includes(p)))
+      r.leaks.push({ name: "coverage", text: path, reason: "input image was not viewed" });
+    for (const path of r.viewed.filter(p => !expected.includes(p)))
+      r.leaks.push({ name: "coverage", text: path, reason: "image is not in the input inventory" });
     runs.push(r);
   }
 }
@@ -109,7 +115,7 @@ runs.forEach((r, i) => {
   console.log(`  started ${r.start}, ${wall} s, ${r.requests} model requests, ${r.calls.length} tool calls`);
   console.log(`  tokens: input ${k(t.input)}, cache read ${k(t.cacheRead)}, cache write ${k(t.cacheWrite)}, output ${k(t.output)}` +
     (t.reasoning ? ` (reasoning ${k(t.reasoning)})` : "") + `; reasoning log ${k(r.reasoning.join("").length)} chars`);
-  console.log(r.leaks.length ? `  NOT SEALED:\n${r.leaks.map((c) => `    ${c.name} ${c.text.slice(0, 200)}`).join("\n")}` : "  sealed: every tool call stayed in the input folder");
+  console.log(r.leaks.length ? `  EXCLUDED (tool/input policy):\n${r.leaks.map((c) => `    ${c.name}: ${c.reason}; ${c.text.slice(0, 200)}`).join("\n")}` : `  passed: ${r.viewed.length} image views; no other operations`);
   if (!r.final) console.log("  no final message");
   if (opt.save) {
     mkdirSync(opt.save, { recursive: true });
@@ -119,3 +125,8 @@ runs.forEach((r, i) => {
   }
 });
 if (!runs.length) console.log("no runs found whose task names " + input);
+if (opt.save) writeFileSync(join(opt.save, `${opt.as}-audit.json`), JSON.stringify(runs.map(r => ({
+  model: r.model, file: r.file, start: r.start, end: r.end, tokens: r.tokens,
+  requests: r.requests, calls: r.calls.length, viewed: r.viewed, violations: r.leaks,
+  eligible: r.leaks.length === 0 && !!r.final,
+})), null, 2) + "\n");

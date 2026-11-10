@@ -64,6 +64,11 @@ Fill `finder-brief.md` once per finder lens: the viewer, their reason for each
 page, and the captures. Keep its principles, scope rules and output format.
 Never add severity or confidence.
 
+For Codex, keep the `view_image`-only tool line. For another harness, substitute
+its actual image reader (for Claude, `Read` on the named images only). If a tool
+wrapper is required, permit it solely to call that image reader and emit the
+images. Tool discovery is not image viewing.
+
 - Finders do what the brief says, so every line steers what they report.
 - Never write a line that excuses a class of defect. "Pages may continue below
   the fold; judge what is visible" excuses content cut off at the bottom.
@@ -104,13 +109,18 @@ node scripts/audit.mjs RUN/input-<arm> --since <dispatch time> --save RUN/findin
 ```
 
 - It finds every Claude or Codex run whose task named that folder.
-- It checks the run stayed sealed: every tool call names only paths inside
-  the folder.
+- It checks that every operation only views the folder's images. It rejects
+  shell, Computer Use, discovery and unknown wrapper operations, even if they
+  name an allowed path. Codex image-only wrappers are inspected without
+  executing their code; Claude `Read` is allowed only on images.
+- Add `--once` when the brief requires one view per image. The audit checks
+  coverage and saves `<arm>-audit.json` alongside the verbatim output.
 - It prints model requests, tool calls, wall time and tokens.
 - It saves each run's final message verbatim as `<arm>-<n>.md` and its logged
   reasoning as `<arm>-<n>-reasoning.md`. The logs hold a summary of the
   reasoning, not the raw reasoning.
-- Read every run's stats. A run that isn't sealed doesn't count.
+- Read every run's stats. A run that fails doesn't count toward the compliant
+  sample. Preserve its output and mark it excluded; do not silently replace it.
 
 ## 7. Merge without losing words
 
