@@ -20,6 +20,9 @@ that a simpler interface must preserve. Use plain language before schema names.
 Include relevant defaults, combination rules, exceptions, inherited state,
 destructive consequences and whose permissions are being displayed. Prefer a
 small worked example for a non-obvious rule; derive it from the source contract.
+If current and legacy behavior coexist, identify which applies to the captured
+entities, or leave that version unknown. Do not generalize a new rule over old
+rows merely because the feature documentation describes the new behavior.
 
 State intended behavior separately from observed configuration. Identify which
 facts are owner requirements, product documentation or implementation evidence.

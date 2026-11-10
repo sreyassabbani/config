@@ -274,7 +274,7 @@ defect in those views compared with before.
 **Packaging** (decided Nov 8): one skill, `home/agents/skills/ui-review`, so
 only one description loads into every session. The orchestrator fills
 `finder-brief.md` and inlines it in each task, so a finder never reads a file
-other than its captures, and briefs name no harness-specific tools. App
+other than its captures. Briefs name the actual image reader for the harness. App
 specifics (login, password file, identity masks, shell width) live in the
 manifest, not the scripts. **Open:** a fixer brief, after the first fix.
 
@@ -419,6 +419,27 @@ The baseline only tests the row pass on the least typical viewer, so findings
 from other viewers' rows and from columns never count toward it.
 
 ## Evidence
+
+**Contextual brief C experiment (Nov 9):** see the [full review and cost
+comparison](ui-review-context-experiment-2026-11-09.md). Three Luna Max runs
+received a sourced product packet and four evidence-specific review lenses;
+one independent Sol High reviewer received the same packet/images plus full
+relevant docs and selective source access. Luna improved its conceptual
+arguments but still missed the exact short-columns symptom and most detailed
+visual owner notes. Sol found that symptom with a source hypothesis and a
+broader set of workflow/conceptual issues, while also missing many visual notes.
+The comparison is workflow-level, with one direct run and development images,
+not a controlled ranking of model ability.
+
+The new Luna task grew from 818 to 2,011 words and its batch output roughly
+doubled. Initial authoring/preparation took about six minutes and included
+reusable template engineering. Parent preparation and adjudication usage are
+recorded separately from child tokens; shared subscription meters are not child
+prices. The supplied packet omitted a legacy explicit-only channel policy,
+which propagated into criticism of Selected people summaries. Original inputs
+are preserved, and future packet preparation now checks applicability/version.
+Neither a better prompt nor source-enabled review removes the need to verify
+claims against the captured state.
 
 - Oct 22 audit: `~/workflow/ia-app-archives/ia-cleanup-evidence-20261028/`
   (`ui-audit-2026-10-22/` holds the primer, harness, findings and boards).
