@@ -5,8 +5,9 @@ description: Use when the user asks for a UI review, to run UI finders on screen
 
 # UI review: orchestrator
 
-You run the review. Cheap finders find defects in screenshots, a mid model
-fixes them, and a cheap finder checks again. Reasons and open questions:
+You run the review. The current experiment uses cheap screenshot finders,
+a mid-model fixer and a cheap re-check. Only the finder stage has been tested;
+the full chain and model assignments remain hypotheses. Reasons and questions:
 `~/config/docs/ui-review-skill.md`.
 
 Scripts are in this skill's `scripts/` folder. Commands below are relative to

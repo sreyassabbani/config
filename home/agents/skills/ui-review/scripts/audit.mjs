@@ -125,8 +125,11 @@ runs.forEach((r, i) => {
   }
 });
 if (!runs.length) console.log("no runs found whose task names " + input);
-if (opt.save) writeFileSync(join(opt.save, `${opt.as}-audit.json`), JSON.stringify(runs.map(r => ({
+if (opt.save) {
+  mkdirSync(opt.save, { recursive: true });
+  writeFileSync(join(opt.save, `${opt.as}-audit.json`), JSON.stringify(runs.map(r => ({
   model: r.model, file: r.file, start: r.start, end: r.end, tokens: r.tokens,
   requests: r.requests, calls: r.calls.length, viewed: r.viewed, violations: r.leaks,
   eligible: r.leaks.length === 0 && !!r.final,
-})), null, 2) + "\n");
+  })), null, 2) + "\n");
+}

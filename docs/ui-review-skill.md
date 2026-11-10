@@ -1,9 +1,18 @@
 # UI review skill: design notes
 
-A skill that lets cheap models (Haiku 5.5, Luna 6) find UI issues, a mid model
-(Sonnet 5.5, Sol 6.1, Opus 5.5 medium) fix them, and a cheap model check
-again. Status marks: **decided**, **proposal** (agreed, not built),
+A skill intended to reduce the owner's work in reaching a coherent UI. Cheap
+finders, a mid-model fixer and a cheap re-check are an **unproven architecture**,
+not the objective. The current experiment tests the finder stage only; it has
+not established the orchestrator/fixer model sizes or the value of the chain
+against a capable reviewer working directly. Status marks: **decided**,
+**proposal** (agreed, not built),
 **hypothesis** (the eval decides).
+
+The [Nov 9 comparison](ui-review-comparison-2026-11-09.md) maps every final
+finding from the six-capture evaluation against the owner's full annotations:
+75 observation families, 231 blocks, 22 successful runs. It includes separate
+tables for both briefs, Luna max, audit exclusions, model-only candidates and
+the distinction between visual, task and product-structure judgments.
 
 ## The idea underneath
 
@@ -363,10 +372,41 @@ captures):
   - `high` reasoned no more than `medium` (0–731 tokens). `xhigh` reasoned
     1.3–4.4k and took 62–101 s. Haiku reasoned about ten times as much.
   - Both effort levels together moved the Codex 5-hour meter by 1%.
-  - No shell this time, but two xhigh runs called Computer Use, and one tried
+  - No substantive shell commands this time; one high run did call the shell
+    with an empty command. Two xhigh runs called Computer Use, and one tried
     to open Preview on the owner's desktop. That call timed out, and no
-    screen was read. A finder's sealing has to come from the harness; the
-    brief alone doesn't hold it.
+    screen was read. The narrower brief improved compliance but did not
+    guarantee it. An operation allowlist in the audit now excludes calls
+    other than image viewing, including discovery, shell and Computer Use.
+
+**Luna max** (Nov 9 local time / Nov 10 UTC): three runs on the revised brief,
+each with its own image-only folder and an explicit `view_image`-only rule.
+
+- 2, 4 and 4 findings; none reported the short columns. Only one obeyed the
+  new tool rule; two searched `ALL_TOOLS` for `view_image`. All viewed each
+  capture once at original detail. No shell or Computer Use calls.
+- 85–103 s, 4.4–5.5k output tokens including 3.6–5.0k reasoning. More effort
+  did not add useful breadth in this batch. Effort and tool wording changed
+  together, so this does not isolate an effort effect.
+- The exact short-columns observation is absent from all 15 successful raw
+  Luna outputs, but only xhigh-1 and max-2 pass today's strict audit. Report
+  raw observations separately from the compliant sample; earlier prompts
+  did not all impose today's tool rule.
+- Account meters moved +6 points (5h) and +1 (week) during the interval,
+  including the parent and any concurrent sessions. This cannot be attributed
+  to the children. The earlier under-1% prediction was not justified.
+
+**Vision after the owner's annotations** (hypothesis, Nov 9). Haiku is a
+candidate for bounded screenshot comparison, not yet proof of the whole
+pipeline. The owner's raised-tab, Chat/Whiteboards and unit/channel critiques
+need different evidence from border/alignment checks. Supply the minimum
+domain contract for contextual judgments once, rather than making each finder
+read the codebase. Keep intended behavior distinct from current behavior.
+Test the chain against direct capable review on fresh natural pages, counting
+owner labeling/merging time and bad changes as well as accepted findings.
+The annotated cases and known bottom gap are development/regression examples,
+not untouched tests. Product restructuring may require a capable contextual
+review; it must not be assigned to a fixed model tier by assumption.
 
 The edits were written knowing this defect, so this shows Haiku can reach the
 judgment when the brief doesn't excuse it. It doesn't show the edits help
