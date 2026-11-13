@@ -106,30 +106,33 @@
       };
 
       ########################################
-      # DevShell
+      # DevShells
       ########################################
-      devShells.${system}.default =
+      devShells.${system} =
         let
           pkgs = import inputs.nixpkgs { inherit system; };
         in
-        pkgs.mkShellNoCC {
-          packages = with pkgs; [
-            (writeShellApplication {
-              name = "apply-nix-darwin-configuration";
-              runtimeInputs = [
-                inputs.nix-darwin.packages.${system}.darwin-rebuild
-              ];
-              text = ''
-                echo "> Applying nix-darwin configuration..."
-                echo "> Running darwin-rebuild switch as root..."
-                sudo darwin-rebuild switch --flake .#"${username}-${system}"
-                echo "> darwin-rebuild switch was successful ✅"
-                echo "> macOS config was successfully applied 🚀"
-              '';
-            })
+        import ./devshells.nix { inherit pkgs; }
+        // {
+          default = pkgs.mkShellNoCC {
+            packages = with pkgs; [
+              (writeShellApplication {
+                name = "apply-nix-darwin-configuration";
+                runtimeInputs = [
+                  inputs.nix-darwin.packages.${system}.darwin-rebuild
+                ];
+                text = ''
+                  echo "> Applying nix-darwin configuration..."
+                  echo "> Running darwin-rebuild switch as root..."
+                  sudo darwin-rebuild switch --flake .#"${username}-${system}"
+                  echo "> darwin-rebuild switch was successful ✅"
+                  echo "> macOS config was successfully applied 🚀"
+                '';
+              })
 
-            self.formatter.${system}
-          ];
+              self.formatter.${system}
+            ];
+          };
         };
 
       ########################################
