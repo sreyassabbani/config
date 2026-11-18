@@ -374,6 +374,40 @@
         "url": "https://flakehub.com/f/NixOS/nixpkgs/0"
       }
     },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1794705614,
+        "narHash": "sha256-DZ5eNWHA6heAHwkMt1SBtF1p8Lfgi4ivqdqmgxUZkLs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1c872b8c508bbbfebc1b0b74777ff391ce0a574c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "petersen": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1795017248,
+        "narHash": "sha256-jjjOg735aKXSRqpv5PAZl01xRYTB8t0JPv+mJ2/QpsA=",
+        "owner": "sreyassabbani",
+        "repo": "petersen",
+        "rev": "19d580ad8f0437c55025ab7fdb458ba45d0ce2f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sreyassabbani",
+        "repo": "petersen",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "determinate": "determinate",
@@ -384,6 +418,7 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "petersen": "petersen",
         "tt-src": "tt-src"
       }
     },

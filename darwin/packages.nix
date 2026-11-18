@@ -5,7 +5,7 @@
     helix
     typst
     tt
-    graph-editor
+    petersen
     yazi
     mkalias
     gnupg

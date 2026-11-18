@@ -16,8 +16,8 @@ let
   ttOverlay = final: _prev: {
     tt = final.callPackage ../pkgs/tt.nix { source = inputs.tt-src; };
   };
-  graphEditorOverlay = final: _prev: {
-    graph-editor = inputs.graph-editor.packages.${final.stdenv.hostPlatform.system}.default;
+  petersenOverlay = final: _prev: {
+    petersen = inputs.petersen.packages.${final.stdenv.hostPlatform.system}.default;
   };
 in
 {
@@ -27,6 +27,6 @@ in
     recordlyOverlay
     fastOverlay
     ttOverlay
-    graphEditorOverlay
+    petersenOverlay
   ];
 }
