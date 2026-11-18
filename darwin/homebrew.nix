@@ -50,6 +50,7 @@
         name = "onedrive";
         greedy = false;
       }
+      "keycastr"
       "opencode-desktop"
       # "gcloud-cli"
       "blender"
