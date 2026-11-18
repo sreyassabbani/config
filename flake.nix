@@ -33,6 +33,10 @@
     };
 
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+
+    # Terminal graph editor (Typst/Fletcher export). Keeps its own nixpkgs pin
+    # so the build matches the editor's lock. Update: `nix flake update graph-editor`.
+    graph-editor.url = "github:sreyassabbani/graph-editor";
   };
 
   ########################################

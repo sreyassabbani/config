@@ -16,6 +16,9 @@ let
   ttOverlay = final: _prev: {
     tt = final.callPackage ../pkgs/tt.nix { source = inputs.tt-src; };
   };
+  graphEditorOverlay = final: _prev: {
+    graph-editor = inputs.graph-editor.packages.${final.stdenv.hostPlatform.system}.default;
+  };
 in
 {
   nixpkgs.overlays = [
@@ -24,5 +27,6 @@ in
     recordlyOverlay
     fastOverlay
     ttOverlay
+    graphEditorOverlay
   ];
 }
