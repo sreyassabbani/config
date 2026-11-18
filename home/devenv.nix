@@ -21,11 +21,8 @@ let
     "workflow/weft" = "rust";
   };
 
-  # nixpkgs' devenv doesn't ship its nushell hook; vendor-autoload it.
-  nushellHook = pkgs.runCommand "devenv-nushell-hook" { } ''
-    mkdir -p $out/share/nushell/vendor/autoload
-    ${lib.getExe pkgs.devenv} hook nu > $out/share/nushell/vendor/autoload/devenv-hook.nu
-  '';
+  # nixpkgs' devenv doesn't ship its nushell hook, so generate it for autoload.
+  nushellHook = pkgs.runCommand "devenv-hook.nu" { } "${lib.getExe pkgs.devenv} hook nu > $out";
 
   allow = project: env: ''
     if [ -d ${lib.escapeShellArg "${home}/${project}"} ]; then
@@ -34,10 +31,9 @@ let
   '';
 in
 {
-  home.packages = [
-    pkgs.devenv
-    nushellHook
-  ];
+  home.packages = [ pkgs.devenv ];
+
+  home.file."Library/Application Support/nushell/autoload/devenv-hook.nu".source = nushellHook;
 
   # Before zoxide's hook (order 2000) so zoxide stays last.
   programs.zsh.initContent = lib.mkOrder 1500 ''
