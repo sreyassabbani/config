@@ -31,7 +31,7 @@ repo. Once per machine, run `npm install --prefix scripts`. If Chromium is missi
 - Look up entity IDs by name in the local data just before capturing. For a
   Convex app, first confirm that `CONVEX_DEPLOYMENT` in the Convex package's
   `.env.local` starts with `local:`. Then, from that package, run
-  `direnv exec . bunx convex data <table> --format jsonLines`.
+  `devenv shell -- bunx convex data <table> --format jsonLines`.
 - Write a manifest; `manifest.example.json` is one for `ia-app` clubs.
   - `app`: the base URL, the login form, and where the demo password lives.
   - `pages`: route templates.

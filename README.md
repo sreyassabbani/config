@@ -9,8 +9,10 @@ Of the many things this repo configures, the following are important notes:
   - custom [snippets](home/helix/snippets)
 - [Nushell](home/nushell.nix) in [Ghostty](home/ghostty.nix)
   - [`zoxide` bound](home/nushell/zoxide.nu) to `cd`
-  - easy project management with [`direnv`](home/direnv.nix)
-  - easy [project startup](home/nushell/ds.nu) with [auto-gen templates](home/nushell/templates)
+  - per-project environments with [devenv](home/devenv.nix), activated on `cd`
+    - [shared envs](envs) (`python`, `cpp`, `cpp-python`, `rust`, `js`) that projects bind to
+      instead of carrying their own config; all pin one nixpkgs revision
+  - easy [project startup](home/nushell/ds.nu) with [templates](home/nushell/templates)
     - opinionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
 - [Helium](darwin/homebrew.nix) as the browser
 - Catppuccin Frappe everywhere possible
@@ -25,6 +27,8 @@ Of the many things this repo configures, the following are important notes:
   - [named](darwin/base.nix#L14-L18) Blue
 
 Overall: generally,
+- [`flake.nix`](flake.nix) wires inputs to [`darwin/`](darwin) and [`home/`](home); every
+  `.nix` file in those directories is imported, so adding a module is adding a file.
 - [`darwin/`](darwin) is the Mac: [packages](darwin/packages.nix),
   [Homebrew apps](darwin/homebrew.nix), [fonts](darwin/fonts.nix),
   [Dock defaults](darwin/defaults.nix), the [default browser](darwin/activation.nix),

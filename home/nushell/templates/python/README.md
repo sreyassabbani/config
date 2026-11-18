@@ -2,10 +2,10 @@
 
 ## Setup
 
-Choose either setup path; both create the same project-local `.venv`:
+Choose either setup path:
 
-- With Nix and `direnv`: run `direnv allow`. You can use `nix develop` instead if you do
-  not want the automatic directory hook.
+- With [devenv](https://devenv.sh): run `devenv allow` once; the shell hook then activates
+  the environment on `cd` (or run `devenv shell`). It keeps its venv under `.devenv/`.
 - Without Nix: install [`uv`](https://docs.astral.sh/uv/getting-started/installation/) and
   run `uv sync`. `uv` can install a compatible Python version when needed.
 
@@ -20,4 +20,4 @@ This project uses `uv`.
 - Sync the environment with `uv sync`
 - Generate or refresh the lockfile with `uv lock`
 
-Commit `uv.lock` so Nix and non-Nix contributors resolve the same Python dependencies.
+Commit `uv.lock` so devenv and non-devenv contributors resolve the same Python dependencies.

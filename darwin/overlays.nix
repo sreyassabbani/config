@@ -15,6 +15,7 @@ let
     in
     {
       fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
+      devenv = unstablePkgs.devenv;
     };
 
   flakes = final: _prev: {
