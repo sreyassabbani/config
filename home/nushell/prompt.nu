@@ -5,8 +5,9 @@ $env.PROMPT_COMMAND = {||
   } else {
     $"(ansi '#737994')($current)(ansi reset)\n"
   }
+  let devenv = if "DEVENV_ROOT" in $env { $"(ansi '#a6d189')devenv(ansi reset) " } else { "" }
 
-  $"\n($location)(ansi '#8caaee')($env.USER)(ansi reset) (ansi '#f4b8e4')[λ](ansi reset) "
+  $"\n($location)(ansi '#8caaee')($env.USER)(ansi reset) ($devenv)(ansi '#f4b8e4')[λ](ansi reset) "
 }
 
 $env.PROMPT_COMMAND_RIGHT = {|| "" }

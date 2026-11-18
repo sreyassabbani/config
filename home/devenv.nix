@@ -44,6 +44,17 @@ in
       config.lib.file.mkOutOfStoreSymlink "${home}/Library/Application Support/nushell/env.nu";
   };
 
+  # Drop the `devenv watching N files` bar under the prompt (auto-reload still works)
+  # and the `(devenv) ` prefix; `nushell/prompt.nu` marks devenv shells itself.
+  xdg.configFile."devenv/config.yaml".text = ''
+    version: 1
+    tui:
+      statusline:
+        enabled: false
+    shell:
+      prompt_prefix: false
+  '';
+
   # Before zoxide's hook (order 2000) so zoxide stays last.
   programs.zsh.initContent = lib.mkOrder 1500 ''
     eval "$(devenv hook zsh)"
