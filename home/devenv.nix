@@ -33,7 +33,16 @@ in
 {
   home.packages = [ pkgs.devenv ];
 
-  home.file."Library/Application Support/nushell/autoload/devenv-hook.nu".source = nushellHook;
+  home.file = {
+    "Library/Application Support/nushell/autoload/devenv-hook.nu".source = nushellHook;
+
+    # The hook's `devenv shell` starts nu with its own config, which sources the user's
+    # from `~/.config/nushell`; ours lives in Application Support (macOS default).
+    ".config/nushell/config.nu".source =
+      config.lib.file.mkOutOfStoreSymlink "${home}/Library/Application Support/nushell/config.nu";
+    ".config/nushell/env.nu".source =
+      config.lib.file.mkOutOfStoreSymlink "${home}/Library/Application Support/nushell/env.nu";
+  };
 
   # Before zoxide's hook (order 2000) so zoxide stays last.
   programs.zsh.initContent = lib.mkOrder 1500 ''
