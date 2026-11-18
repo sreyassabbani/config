@@ -14,6 +14,7 @@
   };
 
   # Keep uv on the Nix Python and the venv at `.venv`, where plain `uv sync` puts it.
+  # Don't set `UV_PYTHON`: it points `uv pip` at the read-only store Python.
   env = {
     UV_PYTHON_DOWNLOADS = "never";
     UV_PROJECT_ENVIRONMENT = lib.mkForce "${config.devenv.root}/.venv";
