@@ -12,8 +12,8 @@ Of the many things this repo configures, the following are important notes:
   - per-project environments with [devenv](home/devenv.nix), activated on `cd`
     - [shared envs](envs) (`python`, `cpp`, `cpp-python`, `rust`, `js`) that projects bind to
       instead of carrying their own config; all pin one nixpkgs revision
-  - easy [project startup](home/nushell/ds.nu) with [templates](home/nushell/templates)
-    - opinionated project setups (e.g. for Python: `uv`, `ruff`, `basedpyright`)
+  - [`ds`](home/nushell/ds.nu) starts a project from a shared env (e.g. for Python: `uv`,
+    `ruff`, `basedpyright`), keeping that pin
 - [Helium](darwin/homebrew.nix) as the browser
 - Catppuccin Frappe everywhere possible
 - [Anki on the tailnet](home/anki-blue.nix): a web front end for my Anki collection at
@@ -36,7 +36,8 @@ Overall: generally,
 - [`home/`](home) is user environment: [shell config](home/nushell.nix),
   [editor config](home/helix.nix), [Git](home/git.nix), [GPG](home/gpg.nix),
   [SSH](home/ssh.nix), [Ghostty](home/ghostty.nix),
-  [project templates](home/nushell/templates), and [other local tooling](home/core.nix).
+  and [other local tooling](home/core.nix).
+- [`envs/`](envs) holds the shared devenv environments.
 
 Agent setup details and outstanding choices are in [home/agents](home/agents/README.md).
 
