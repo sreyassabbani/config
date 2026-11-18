@@ -20,7 +20,8 @@
   };
 
   enterShell = ''
-    [ -d "$UV_PROJECT_ENVIRONMENT" ] || uv venv --quiet "$UV_PROJECT_ENVIRONMENT"
+    # (Re)create the venv when missing or when its interpreter was garbage-collected.
+    "$UV_PROJECT_ENVIRONMENT/bin/python" -c "" 2>/dev/null || uv venv --clear --quiet "$UV_PROJECT_ENVIRONMENT"
     . "$UV_PROJECT_ENVIRONMENT/bin/activate"
   '';
 }
