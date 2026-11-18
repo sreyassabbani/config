@@ -1,17 +1,5 @@
-{ self, username }:
-{ ... }:
+{ self, username, ... }:
 {
-  imports = [
-    ./activation.nix
-    ./defaults.nix
-    ./fonts.nix
-    ./packages.nix
-    ./rex.nix
-    ./steam.nix
-    ./users.nix
-    ./window-manager.nix
-  ];
-
   networking = {
     computerName = "Blue";
     hostName = "blue";

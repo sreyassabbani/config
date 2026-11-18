@@ -1,32 +1,31 @@
-{
-  vscodeExtensionsOverlay,
-}:
-{ pkgs, inputs, ... }:
+{ inputs, ... }:
 let
-  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-  musicCliOverlay = final: _prev: {
+  # Local packages in `pkgs/`; each file is called with `callPackage`.
+  local = final: _prev: {
     music-cli = final.callPackage ../pkgs/music-cli.nix { };
-  };
-  recordlyOverlay = final: _prev: {
     recordly = final.callPackage ../pkgs/recordly.nix { };
-  };
-  fastOverlay = final: _prev: {
-    fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
-  };
-  ttOverlay = final: _prev: {
     tt = final.callPackage ../pkgs/tt.nix { source = inputs.tt-src; };
   };
-  petersenOverlay = final: _prev: {
+
+  # Packages that need a newer nixpkgs than the system pin.
+  unstable =
+    final: _prev:
+    let
+      unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${final.stdenv.hostPlatform.system};
+    in
+    {
+      fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
+    };
+
+  flakes = final: _prev: {
     petersen = inputs.petersen.packages.${final.stdenv.hostPlatform.system}.default;
   };
 in
 {
   nixpkgs.overlays = [
-    vscodeExtensionsOverlay
-    musicCliOverlay
-    recordlyOverlay
-    fastOverlay
-    ttOverlay
-    petersenOverlay
+    inputs.nix-vscode-extensions.overlays.default
+    local
+    unstable
+    flakes
   ];
 }
