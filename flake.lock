@@ -361,11 +361,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1795045329,
-        "narHash": "sha256-DOlvMOVYrLK1ATo5aOhZkYYIPXQ5tCmPe+EfN+4ueFg=",
+        "lastModified": 1795057845,
+        "narHash": "sha256-qW7OVZGb1vuLWMDXyov8r7ZHJiub9zlJo4iDWBne6Ek=",
         "owner": "sreyassabbani",
         "repo": "petersen",
-        "rev": "215e39250d1babb0fc79cd29fe66f129be3c3e30",
+        "rev": "29983482d7ff5cdf1b759944d28ed4fd462e6f5a",
         "type": "github"
       },
       "original": {
