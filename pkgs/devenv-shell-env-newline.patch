@@ -1,0 +1,333 @@
+diff --git a/devenv/src/devenv/mod.rs b/devenv/src/devenv/mod.rs
+index 0df2fc0..ef21700 100644
+--- a/devenv/src/devenv/mod.rs
++++ b/devenv/src/devenv/mod.rs
+@@ -1731,8 +1731,8 @@ impl Devenv {
+             // Keep Nix activation first so it snapshots the caller's
+             // PATH/XDG_DATA_DIRS before the runtime dotenv layer changes either.
+             let mut activation = output;
+-            activation.push_str(&dotenv.activation_script());
+-            activation.push_str(&dotenv.message_script());
++            push_shell_fragment(&mut activation, &dotenv.activation_script());
++            push_shell_fragment(&mut activation, &dotenv.message_script());
+             Ok(activation)
+         }
+     }
+@@ -1874,9 +1874,9 @@ impl Devenv {
+         // For non-interactive commands, always use bash directly
+         if let Some(cmd) = cmd {
+             let mut script = bash_init_script(&shell_env);
+-            script.push_str(&dotenv_activation);
+-            script.push_str(&task_exports);
+-            script.push_str(&dotenv_messages);
++            push_shell_fragment(&mut script, &dotenv_activation);
++            push_shell_fragment(&mut script, &task_exports);
++            push_shell_fragment(&mut script, &dotenv_messages);
+             // Pass the command via args to avoid changing the script hash.
+             // $1 expands before eval; `set --` hides the wrapper's positional parameters.
+             // TODO(sander): Add a mode for raw shell source, like `bash -c`.
+@@ -1898,10 +1898,14 @@ impl Devenv {
+                 // Non-bash: write env script, generate bash wrapper that execs into target shell
+                 let env_script_path = self.devenv_dotfile.join("shell-env.sh");
+                 let mut env_content = shell_env;
+-                env_content.push_str(&dotenv_activation);
+-                env_content.push_str(&task_exports);
+-                env_content.push_str(&task_messages);
+-                env_content.push_str(&dotenv_messages);
++                // `trim_end()` above strips the trailing newline after
++                // `eval "${shellHook:-}"`. Without a separator, the first
++                // `export PATH='…'` lands on that same physical line, bash
++                // consumes the quotes, and PATH values with spaces word-split.
++                push_shell_fragment(&mut env_content, &dotenv_activation);
++                push_shell_fragment(&mut env_content, &task_exports);
++                push_shell_fragment(&mut env_content, &task_messages);
++                push_shell_fragment(&mut env_content, &dotenv_messages);
+                 std::fs::write(&env_script_path, &env_content)
+                     .into_diagnostic()
+                     .wrap_err("Failed to write env script")?;
+@@ -1930,10 +1934,10 @@ impl Devenv {
+             } else {
+                 // Bash (default)
+                 let mut script = bash_init_script(&shell_env);
+-                script.push_str(&dotenv_activation);
+-                script.push_str(&task_exports);
+-                script.push_str(&task_messages);
+-                script.push_str(&dotenv_messages);
++                push_shell_fragment(&mut script, &dotenv_activation);
++                push_shell_fragment(&mut script, &task_exports);
++                push_shell_fragment(&mut script, &task_messages);
++                push_shell_fragment(&mut script, &dotenv_messages);
+                 if self.options.shell_settings.prompt_prefix {
+                     script.push_str(BashDialect.prompt_prefix());
+                     script.push('\n');
+@@ -3824,6 +3828,23 @@ pub fn format_shell_exports(exports: &BTreeMap<String, String>) -> String {
+     buf
+ }
+ 
++/// Append a shell-script fragment, inserting a newline first if `dest` does
++/// not already end with one.
++///
++/// Empty fragments are a no-op so callers with no task exports or messages
++/// leave the env script unchanged. Used when concatenating the Nix env script
++/// (which `trim_end()` may leave without a trailing newline) with
++/// `format_shell_exports` / task messages.
++pub fn push_shell_fragment(dest: &mut String, fragment: &str) {
++    if fragment.is_empty() {
++        return;
++    }
++    if !dest.is_empty() && !dest.ends_with('\n') {
++        dest.push('\n');
++    }
++    dest.push_str(fragment);
++}
++
+ /// Generate a bash init script that sources .bashrc and applies the devenv shell environment.
+ fn bash_init_script(shell_env: &str) -> String {
+     indoc::formatdoc! {
+@@ -5377,4 +5398,89 @@ BOOTSTRAP_KEY = { description = "bootstrap key", as_path = true }
+             vec![("CONFIG".to_string(), "key=value=extra".to_string())]
+         );
+     }
++
++    #[test]
++    fn push_shell_fragment_skips_empty_additions() {
++        let mut script = r#"eval "${shellHook:-}""#.to_string();
++        push_shell_fragment(&mut script, "");
++        assert_eq!(script, r#"eval "${shellHook:-}""#);
++    }
++
++    #[test]
++    fn push_shell_fragment_is_noop_when_body_already_has_newline() {
++        let mut script = "eval true\n".to_string();
++        push_shell_fragment(&mut script, "export FOO=bar\n");
++        assert_eq!(script, "eval true\nexport FOO=bar\n");
++    }
++
++    /// Reproduces the `.devenv/shell-env.sh` assembly in `prepare_shell`:
++    /// `trim_end()` strips the newline after `eval "${shellHook:-}"`, and
++    /// without a separator the first PATH export is glued onto that line.
++    #[test]
++    fn trimmed_shell_env_keeps_path_exports_on_their_own_line() {
++        let output_str = concat!("export FOO=1\n", r#"eval "${shellHook:-}""#, "\n");
++        let shell_env = output_str
++            .trim_end()
++            .trim_end_matches("exec bash")
++            .trim_end_matches("exec $SHELL")
++            .to_string();
++        assert!(
++            !shell_env.ends_with('\n'),
++            "trim_end() must strip the trailing newline for this regression to apply"
++        );
++
++        let mut exports = BTreeMap::new();
++        exports.insert(
++            "PATH".into(),
++            "/tmp/venv/bin:/tmp/Some App/bin:/usr/bin".into(),
++        );
++        exports.insert("VIRTUAL_ENV".into(), "/tmp/venv".into());
++
++        let mut env_content = shell_env;
++        push_shell_fragment(&mut env_content, &format_shell_exports(&exports));
++
++        assert!(
++            !env_content.contains(r#"eval "${shellHook:-}"export"#),
++            "first export must not be glued onto the eval line:\n{env_content}"
++        );
++        let eval_line = env_content
++            .lines()
++            .find(|line| line.contains("shellHook"))
++            .expect("eval line");
++        assert_eq!(eval_line, r#"eval "${shellHook:-}""#);
++
++        let path_line = env_content
++            .lines()
++            .find(|line| line.starts_with("export PATH="))
++            .expect("PATH export");
++        assert!(
++            path_line.contains("Some App"),
++            "PATH export should keep the space-containing directory: {path_line}"
++        );
++
++        // Source the assembled script and print PATH (the original glue caused
++        // bash to word-split the PATH value and reject the remainder).
++        env_content.push_str("printf '%s\\n' \"$PATH\"\n");
++        let script_path = std::env::temp_dir().join(format!(
++            "devenv-shell-env-path-spaces-{}.sh",
++            std::process::id()
++        ));
++        std::fs::write(&script_path, &env_content).expect("write assembled env script");
++
++        let output = std::process::Command::new("bash")
++            .args(["--noprofile", "--norc"])
++            .arg(&script_path)
++            .env_remove("shellHook")
++            .output()
++            .expect("run bash");
++        let _ = std::fs::remove_file(&script_path);
++
++        let stderr = String::from_utf8_lossy(&output.stderr);
++        assert!(output.status.success(), "bash failed: {stderr}");
++        assert!(stderr.is_empty(), "bash emitted errors: {stderr}");
++        assert_eq!(
++            String::from_utf8_lossy(&output.stdout).trim_end(),
++            "/tmp/venv/bin:/tmp/Some App/bin:/usr/bin"
++        );
++    }
+ }
+diff --git a/devenv/src/lib.rs b/devenv/src/lib.rs
+index f0b1801..0f93517 100644
+--- a/devenv/src/lib.rs
++++ b/devenv/src/lib.rs
+@@ -22,7 +22,7 @@ mod util;
+ pub use devenv::{
+     ClientRunMode, DIRENVRC, DIRENVRC_VERSION, Devenv, DevenvOptions, ProcessOptions,
+     ProcessStartOutcome, SecretsNeedPrompting, SecretsPromptSource, ShellCommand,
+-    format_shell_exports, is_ai_agent, load_cachix_secretspec,
++    format_shell_exports, is_ai_agent, load_cachix_secretspec, push_shell_fragment,
+ };
+ pub use devenv_tasks as tasks;
+ pub use metadata::{InfoSections, InputAttribute, InputMetadata, InputSource, Metadata};
+diff --git a/devenv/src/main.rs b/devenv/src/main.rs
+index 9a4971d..3e7ccd6 100644
+--- a/devenv/src/main.rs
++++ b/devenv/src/main.rs
+@@ -1694,7 +1694,7 @@ async fn dispatch_command(
+             // Re-read dotenv after tasks so generated files are exported on the
+             // same direnv activation.
+             let mut output = devenv.print_dev_env(false).await?;
+-            output.push_str(&devenv::format_shell_exports(&task_exports));
++            devenv::push_shell_fragment(&mut output, &devenv::format_shell_exports(&task_exports));
+             Ok(CommandResult::Print(output))
+         }
+         Commands::PrintPaths => {
+diff --git a/devenv/src/reload/mod.rs b/devenv/src/reload/mod.rs
+index 6b24686..94ab2e8 100644
+--- a/devenv/src/reload/mod.rs
++++ b/devenv/src/reload/mod.rs
+@@ -9,7 +9,7 @@ pub mod owner;
+ // Re-export the generic reload engine so callers use a single `reload` namespace.
+ pub use devenv_reload::{Config, ShellCoordinator};
+ 
+-use crate::devenv::{format_shell_exports, resolve_shell_path};
++use crate::devenv::{format_shell_exports, push_shell_fragment, resolve_shell_path};
+ use devenv_core::config::Clean;
+ use devenv_reload::{BuildContext, BuildError, CommandBuilder, ShellBuilder};
+ use devenv_shell::dialect::{BashDialect, RcfileContext, ShellDialect, create_dialect};
+@@ -86,8 +86,11 @@ impl DevenvShellBuilder {
+         // (e.g. VIRTUAL_ENV, PATH from venv override the Nix-provided ones).
+         let env_script_path = self.dotfile.join("shell-env.sh");
+         let mut env_script = self.initial_env_script.clone();
+-        env_script.push_str(&format_shell_exports(&self.task_exports));
+-        env_script.push_str(&BashDialect.format_task_messages(&self.task_messages));
++        push_shell_fragment(&mut env_script, &format_shell_exports(&self.task_exports));
++        push_shell_fragment(
++            &mut env_script,
++            &BashDialect.format_task_messages(&self.task_messages),
++        );
+         write_file(&env_script_path, &env_script, "env script")?;
+ 
+         tracing::trace!("Shell setting: {:?}", self.shell);
+diff --git a/devenv/src/reload/owner.rs b/devenv/src/reload/owner.rs
+index 18b8444..a928d45 100644
+--- a/devenv/src/reload/owner.rs
++++ b/devenv/src/reload/owner.rs
+@@ -7,7 +7,7 @@
+ //! still reach it during shutdown.
+ 
+ use crate::Devenv;
+-use crate::devenv::{ShellCommand, format_shell_exports};
++use crate::devenv::{ShellCommand, format_shell_exports, push_shell_fragment};
+ use devenv_core::VerbosityLevel;
+ use devenv_nix_backend::{NIX_STACK_SIZE, gc_register_current_thread};
+ use devenv_reload::{BuildError, WatcherHandle};
+@@ -162,7 +162,7 @@ async fn run_build_reload_env(
+         .print_dev_env(false)
+         .await
+         .map_err(|e| BuildError::new(format!("Failed to build environment: {}", e)))?;
+-    env_script.push_str(&format_shell_exports(&exports));
++    push_shell_fragment(&mut env_script, &format_shell_exports(&exports));
+ 
+     let temp_path = reload_file.with_extension("sh.tmp");
+     std::fs::write(&temp_path, &env_script)
+diff --git a/tests/shell-path-spaces/.test-config.yml b/tests/shell-path-spaces/.test-config.yml
+new file mode 100644
+index 0000000..13c16ce
+--- /dev/null
++++ b/tests/shell-path-spaces/.test-config.yml
+@@ -0,0 +1 @@
++use_shell: false
+diff --git a/tests/shell-path-spaces/.test.sh b/tests/shell-path-spaces/.test.sh
+new file mode 100755
+index 0000000..abf366b
+--- /dev/null
++++ b/tests/shell-path-spaces/.test.sh
+@@ -0,0 +1,44 @@
++#!/usr/bin/env bash
++set -euo pipefail
++
++fail() { echo "FAIL: $*" >&2; exit 1; }
++
++space_dir="$PWD/Some App/bin"
++tail_dir="$PWD/After Space/bin"
++mkdir -p "$space_dir" "$tail_dir" "$PWD/zsh-config"
++export PATH="$space_dir:$PATH:$tail_dir"
++export ZDOTDIR="$PWD/zsh-config"
++
++# Piped stdin exercises prepare_shell's env-script path. zsh is provided by
++# the fixture so a missing shell cannot be mistaken for a successful test.
++cat > shell-commands.zsh <<'COMMANDS'
++printf 'PATH_CHECK=%s\n' "$PATH"
++exit
++COMMANDS
++if ! devenv --no-reload --shell zsh shell <shell-commands.zsh \
++  >devenv-shell.stdout 2>devenv-shell.stderr; then
++  cat devenv-shell.stdout devenv-shell.stderr >&2
++  fail "zsh shell failed"
++fi
++if grep -q "not a valid identifier" devenv-shell.stdout devenv-shell.stderr; then
++  cat devenv-shell.stdout devenv-shell.stderr >&2
++  fail "PATH exports were parsed without their quotes"
++fi
++
++check_path() {
++  local value="$1"
++  for directory in "$space_dir" "$tail_dir" "$PWD/.devenv/state/venv/bin"; do
++    case ":$value:" in
++      *":$directory:"*) ;;
++      *) fail "missing PATH entry '$directory' in: $value" ;;
++    esac
++  done
++}
++
++shell_path=$(sed -n 's/^PATH_CHECK=//p' devenv-shell.stdout)
++check_path "$shell_path"
++[ -f .devenv/shell-env.sh ] || fail "env script was not written"
++if grep -E 'eval "\$\{shellHook:-\}"export' .devenv/shell-env.sh; then
++  fail "task exports were glued onto the shell hook"
++fi
++check_path "$(devenv shell -- printenv PATH)"
+diff --git a/tests/shell-path-spaces/devenv.nix b/tests/shell-path-spaces/devenv.nix
+new file mode 100644
+index 0000000..40f4c30
+--- /dev/null
++++ b/tests/shell-path-spaces/devenv.nix
+@@ -0,0 +1,19 @@
++{ pkgs, ... }:
++{
++  packages = [ pkgs.zsh ];
++  # Simulate Python venv activation: an enterShell task re-prepends a directory
++  # to PATH and exports PATH. Combined with a space-containing PATH entry this
++  # used to glue `export PATH='…'` onto `eval "${shellHook:-}"` in shell-env.sh.
++  tasks."test:venv-path" = {
++    exec = ''
++      mkdir -p "$DEVENV_STATE/venv/bin"
++      export PATH="$DEVENV_STATE/venv/bin:$PATH"
++      export VIRTUAL_ENV="$DEVENV_STATE/venv"
++    '';
++    exports = [
++      "PATH"
++      "VIRTUAL_ENV"
++    ];
++    before = [ "devenv:enterShell" ];
++  };
++}

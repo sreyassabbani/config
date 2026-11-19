@@ -15,7 +15,12 @@ let
     in
     {
       fast = unstablePkgs.callPackage ../pkgs/fast.nix { };
-      devenv = unstablePkgs.devenv;
+      # cachix/devenv#3166 (merged after 2.4.0): `shell-env.sh` glued the first appended
+      # export onto `eval "''${shellHook:-}"`, word-splitting values with spaces (e.g. a
+      # dotenv `SEC_USER_AGENT`) in `--no-reload` shells. Drop once a release has it.
+      devenv = unstablePkgs.devenv.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ../pkgs/devenv-shell-env-newline.patch ];
+      });
     };
 
   flakes = final: _prev: {
