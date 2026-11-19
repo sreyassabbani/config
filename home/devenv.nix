@@ -21,8 +21,14 @@ let
     "workflow/weft" = "rust";
   };
 
+  # Hook shells skip hot-reload: its PTY wrapper adds the `devenv watching N files` bar,
+  # and hiding only the bar (`tui.statusline.enabled: false`) makes nushell redraw the
+  # prompt on a new line per keystroke once it reaches the bottom row (devenv 2.4.0).
+  # After editing `devenv.nix`, `exit` and `cd` back in.
+  hookArgs = "-- --no-reload";
+
   # nixpkgs' devenv doesn't ship its nushell hook, so generate it for autoload.
-  nushellHook = pkgs.runCommand "devenv-hook.nu" { } "${lib.getExe pkgs.devenv} hook nu > $out";
+  nushellHook = pkgs.runCommand "devenv-hook.nu" { } "${lib.getExe pkgs.devenv} hook nu ${hookArgs} > $out";
 
   allow = project: env: ''
     if [ -d ${lib.escapeShellArg "${home}/${project}"} ]; then
@@ -44,20 +50,16 @@ in
       config.lib.file.mkOutOfStoreSymlink "${home}/Library/Application Support/nushell/env.nu";
   };
 
-  # Drop the `devenv watching N files` bar under the prompt (auto-reload still works)
-  # and the `(devenv) ` prefix; `nushell/prompt.nu` marks devenv shells itself.
+  # Drop the `(devenv) ` prefix; `nushell/prompt.nu` marks devenv shells itself.
   xdg.configFile."devenv/config.yaml".text = ''
     version: 1
-    tui:
-      statusline:
-        enabled: false
     shell:
       prompt_prefix: false
   '';
 
   # Before zoxide's hook (order 2000) so zoxide stays last.
   programs.zsh.initContent = lib.mkOrder 1500 ''
-    eval "$(devenv hook zsh)"
+    eval "$(devenv hook zsh ${hookArgs})"
   '';
 
   home.activation.devenvBindings = lib.hm.dag.entryAfter [ "writeBoundary" ] (
