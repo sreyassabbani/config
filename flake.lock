@@ -384,7 +384,8 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "petersen": "petersen",
-        "tt-src": "tt-src"
+        "tt-src": "tt-src",
+        "weft-src": "weft-src"
       }
     },
     "tt-src": {
@@ -398,6 +399,22 @@
       "original": {
         "path": "/Users/sreysus/workflow/tt",
         "type": "path"
+      }
+    },
+    "weft-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795142862,
+        "narHash": "sha256-Fz5YVOgkVaMJ7axemQzOvTGBzJ1gXX//j9Qv8lcKVN0=",
+        "ref": "refs/heads/main",
+        "rev": "ee0c8315d7e466c6e94841d4460e8107fe854d5e",
+        "revCount": 14,
+        "type": "git",
+        "url": "file:///Users/sreysus/workflow/weft"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///Users/sreysus/workflow/weft"
       }
     }
   },

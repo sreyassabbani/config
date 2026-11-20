@@ -240,6 +240,15 @@
         }
 
         {
+          name = "markdown";
+          roots = [
+            ".obsidian"
+            ".git"
+          ];
+          "language-servers" = [ "weft" ];
+        }
+
+        {
           name = "nix";
           "file-types" = [ "nix" ];
           roots = [
@@ -272,6 +281,10 @@
 
         nixd = {
           command = "nixd";
+        };
+
+        weft = {
+          command = "${pkgs.weft}/bin/weft";
         };
 
         scls = {

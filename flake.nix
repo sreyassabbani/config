@@ -29,6 +29,13 @@
       flake = false;
     };
 
+    # Markdown language server for the notes vault, built from the local
+    # repository's committed tree. Refresh: `nix flake update weft-src`.
+    weft-src = {
+      url = "git+file:///Users/sreysus/workflow/weft";
+      flake = false;
+    };
+
     # Terminal graph editor (Typst/Fletcher export). Keeps its own nixpkgs pin
     # so the build matches the editor's lock. Update: `nix flake update petersen`.
     petersen.url = "github:sreyassabbani/petersen";
@@ -56,6 +63,7 @@
 
       packages.${system} = {
         tt = pkgs.callPackage ./pkgs/tt.nix { source = inputs.tt-src; };
+        weft = pkgs.callPackage ./pkgs/weft.nix { source = inputs.weft-src; };
         mobile-development =
           (import ./pkgs/mobile-development.nix {
             pkgs = import nixpkgs {

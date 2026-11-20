@@ -5,6 +5,7 @@ let
     music-cli = final.callPackage ../pkgs/music-cli.nix { };
     recordly = final.callPackage ../pkgs/recordly.nix { };
     tt = final.callPackage ../pkgs/tt.nix { source = inputs.tt-src; };
+    weft = final.callPackage ../pkgs/weft.nix { source = inputs.weft-src; };
   };
 
   # Packages that need a newer nixpkgs than the system pin.
