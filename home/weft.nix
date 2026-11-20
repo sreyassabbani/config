@@ -3,11 +3,18 @@ let
   home = config.home.homeDirectory;
   vault = "${home}/workflow/thoughts";
   log = "${home}/Library/Logs/weft-sync.log";
+  # The last day whose change lists are written.
+  listed = "${config.xdg.stateHome}/weft-sync/listed-through";
 
   # Commits and pushes the vault, as obsidian-git did. `weft-sync` runs every
   # 30 minutes and pulls only when GitHub rejects the push; `weft-sync login`
   # pulls first. Helix does not reload files changed on disk, so pulling
   # under an open note is avoided rather than handled.
+  #
+  # Each run first writes the change lists (as obsidian-list-modified did)
+  # for every finished day not yet written, appending them to that day's
+  # note. Today's lists appear tomorrow, so the note being written in is
+  # never touched.
   sync = pkgs.writeShellApplication {
     name = "weft-sync";
     # git and gpg come from Nix; ssh is left to /usr/bin, whose UseKeychain
@@ -15,6 +22,8 @@ let
     runtimeInputs = [
       pkgs.git
       pkgs.coreutils
+      pkgs.gnugrep
+      pkgs.weft
     ];
     text = ''
       cd ${vault}
@@ -36,6 +45,36 @@ let
         fail "the vault is in the middle of a merge; finish it, then sync resumes"
       fi
 
+      write_lists() {
+        # The first run starts from today: earlier days are list-modified's.
+        if [ ! -f "${listed}" ]; then
+          mkdir -p "$(dirname "${listed}")"
+          date -d yesterday +%F >"${listed}"
+          return
+        fi
+        local day next note lists
+        day=$(date -d "$(cat "${listed}") + 1 day" +%F)
+        while [[ $day < $(date +%F) ]]; do
+          next=$(date -d "$day + 1 day" +%F)
+          note=$(date -d "$day" +%Y/%m/%d).md
+          if ! grep -qsF '%% LIST CREATED %%' "$note"; then
+            lists=$(weft changes "$day 00:00" "$next 00:00" --into "$note" \
+              --exclude '[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9].md')
+            if [ -n "$lists" ]; then
+              mkdir -p "$(dirname "$note")"
+              if [ -s "$note" ]; then
+                [ -z "$(tail -c1 "$note")" ] || echo >>"$note"
+                echo >>"$note"
+              fi
+              printf '%s\n' "$lists" >>"$note"
+              echo "wrote change lists into $note"
+            fi
+          fi
+          echo "$day" >"${listed}"
+          day=$next
+        done
+      }
+
       commit() {
         git add -A
         # Paths unquoted, as obsidian-git lists them.
@@ -51,6 +90,7 @@ let
         echo "pulled"
       }
 
+      write_lists
       commit
       [ "''${1:-}" = login ] && pull
       if [ -z "$(git rev-list '@{upstream}..HEAD')" ]; then
