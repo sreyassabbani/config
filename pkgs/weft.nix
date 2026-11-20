@@ -4,7 +4,7 @@
   source,
 }:
 
-# After committing in ~/workflow/weft, refresh and test the local source:
+# After pushing ~/workflow/weft to GitHub, refresh and test:
 #   nix flake update weft-src
 #   nix build .#weft
 #   ./result/bin/weft --version

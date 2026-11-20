@@ -410,11 +410,11 @@
         "rev": "a6ab2a26916500cd777052ff4e1c5878abd25e23",
         "revCount": 17,
         "type": "git",
-        "url": "file:///Users/sreysus/workflow/weft"
+        "url": "ssh://git@github.com/sreyassabbani/weft"
       },
       "original": {
         "type": "git",
-        "url": "file:///Users/sreysus/workflow/weft"
+        "url": "ssh://git@github.com/sreyassabbani/weft"
       }
     }
   },

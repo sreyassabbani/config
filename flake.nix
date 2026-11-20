@@ -29,10 +29,10 @@
       flake = false;
     };
 
-    # Markdown language server for the notes vault, built from the local
-    # repository's committed tree. Refresh: `nix flake update weft-src`.
+    # Markdown language server for the notes vault (private repository).
+    # After pushing to weft: `nix flake update weft-src`.
     weft-src = {
-      url = "git+file:///Users/sreysus/workflow/weft";
+      url = "git+ssh://git@github.com/sreyassabbani/weft";
       flake = false;
     };
 
