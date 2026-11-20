@@ -8,7 +8,7 @@ let
 
   # Commits and pushes the vault, as obsidian-git did. `weft-sync` runs every
   # 30 minutes and pulls only when GitHub rejects the push; `weft-sync login`
-  # pulls first. Helix does not reload files changed on disk, so pulling
+  # pulls first. By hand: `weft sync`. Helix does not reload files changed on disk, so pulling
   # under an open note is avoided rather than handled.
   #
   # Each run first writes the change lists (as obsidian-list-modified did)
@@ -107,6 +107,20 @@ let
     '';
   };
 
+  # `weft` on PATH: `weft sync` runs the sync above, anything else goes to
+  # weft itself. Sync stays here rather than in weft because it is this
+  # machine's git policy, not something a public tool should carry.
+  cli = pkgs.writeShellApplication {
+    name = "weft";
+    text = ''
+      if [ "''${1:-}" = sync ]; then
+        shift
+        exec ${sync}/bin/weft-sync "$@"
+      fi
+      exec ${pkgs.weft}/bin/weft "$@"
+    '';
+  };
+
   agent = args: extra: {
     enable = true;
     config = {
@@ -120,10 +134,7 @@ in
 {
   # weft, the language server for the notes in ~/workflow/thoughts, and the
   # sync that replaced obsidian-git. Source: ~/workflow/weft.
-  home.packages = [
-    pkgs.weft
-    sync
-  ];
+  home.packages = [ cli ];
 
   programs.helix.languages = {
     language = [
