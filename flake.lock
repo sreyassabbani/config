@@ -404,17 +404,17 @@
     "weft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1795143842,
-        "narHash": "sha256-ZDwVj8BFeetci6MezrLu+G7q74Fk1syXf634QGatQxc=",
-        "ref": "refs/heads/main",
-        "rev": "a6ab2a26916500cd777052ff4e1c5878abd25e23",
-        "revCount": 17,
-        "type": "git",
-        "url": "ssh://git@github.com/sreyassabbani/weft"
+        "lastModified": 1795144563,
+        "narHash": "sha256-LfsKb/b1v1Bjo298adHGP5+B3YbR06aGULZL6uGYNjo=",
+        "owner": "sreyassabbani",
+        "repo": "weft",
+        "rev": "a7d8502ea9f5e28b83efb494e313946d4444c409",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/sreyassabbani/weft"
+        "owner": "sreyassabbani",
+        "repo": "weft",
+        "type": "github"
       }
     }
   },

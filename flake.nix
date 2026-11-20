@@ -29,10 +29,10 @@
       flake = false;
     };
 
-    # Markdown language server for the notes vault (private repository).
+    # Markdown language server for the notes vault.
     # After pushing to weft: `nix flake update weft-src`.
     weft-src = {
-      url = "git+ssh://git@github.com/sreyassabbani/weft";
+      url = "github:sreyassabbani/weft";
       flake = false;
     };
 
