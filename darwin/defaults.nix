@@ -20,7 +20,6 @@
         { app = "/Applications/Rex Beta.app"; }
         { app = "/Applications/T3 Code (Nightly).app"; }
         { app = "/Applications/Helium.app"; }
-        { app = "/Applications/Obsidian.app"; }
         { app = "/Applications/Notion Calendar.app"; }
         { app = "/Applications/Zotero.app"; }
       ];
