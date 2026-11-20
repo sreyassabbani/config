@@ -404,11 +404,11 @@
     "weft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1795142862,
-        "narHash": "sha256-Fz5YVOgkVaMJ7axemQzOvTGBzJ1gXX//j9Qv8lcKVN0=",
+        "lastModified": 1795143842,
+        "narHash": "sha256-ZDwVj8BFeetci6MezrLu+G7q74Fk1syXf634QGatQxc=",
         "ref": "refs/heads/main",
-        "rev": "ee0c8315d7e466c6e94841d4460e8107fe854d5e",
-        "revCount": 14,
+        "rev": "a6ab2a26916500cd777052ff4e1c5878abd25e23",
+        "revCount": 17,
         "type": "git",
         "url": "file:///Users/sreysus/workflow/weft"
       },
