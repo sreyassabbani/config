@@ -5,8 +5,14 @@
     package = pkgs.helix;
     defaultEditor = true;
 
+    themes.catppuccin_frappe_notes = {
+      inherits = "catppuccin_frappe";
+      # Between Frappé's base (#303446) and cursor-line (#3b3f52).
+      "ui.virtual.whitespace.wikilink" = "#363a4c";
+    };
+
     settings = {
-      theme = "catppuccin_frappe";
+      theme = "catppuccin_frappe_notes";
 
       editor = {
         "line-number" = "relative";
