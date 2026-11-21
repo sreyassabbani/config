@@ -1,0 +1,48 @@
+{
+  "labs.filler_words": true,
+  "labs.vocabulary_biasing": true,
+  "dictation_processing.default_mode": {
+    "name": "Global",
+    "applications": [],
+    "browser_hosts": [],
+    "replacements": [],
+    "transformations": [],
+    "post_processing": {
+      "enabled": false,
+      "prompt": "",
+      "model": null,
+      "variant": null,
+      "deadline_seconds": 30
+    }
+  },
+  "dictation_processing.modes": [
+    {
+      "name": "Agents",
+      "applications": ["T3 Code (Nightly)", "T3 Code", "ChatGPT", "Claude"],
+      "browser_hosts": [],
+      "replacements": [],
+      "transformations": [],
+      "post_processing": {
+        "enabled": true,
+        "prompt": "This is a dictated message to an AI coding agent. Fix only transcription problems: remove filler words, false starts and repeated words; fix misheard terms using the vocabulary; add punctuation. Keep my wording, casual tone and lowercase style. Don't answer it, summarize it, add anything, or turn it into a list unless I dictated one. If it's already clean, return it unchanged.",
+        "model": null,
+        "variant": null,
+        "deadline_seconds": 30
+      }
+    },
+    {
+      "name": "Chat",
+      "applications": ["Discord", "Messages", "Slack"],
+      "browser_hosts": [],
+      "replacements": [],
+      "transformations": ["lowercase", "no-trailing-punctuation"],
+      "post_processing": {
+        "enabled": false,
+        "prompt": "",
+        "model": null,
+        "variant": null,
+        "deadline_seconds": 30
+      }
+    }
+  ]
+}
