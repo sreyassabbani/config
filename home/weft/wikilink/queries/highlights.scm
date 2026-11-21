@@ -3,8 +3,8 @@
 ; `[[target]]`: the target is what reads.
 (link (target) @markup.link.text .)
 
-; `[[target|alias]]`: the target is faint and the pipe uses the bracket color.
+; `[[target|alias]]`: the target and pipe use the bracket color.
 (link
-  (target) @ui.virtual.whitespace
+  (target) @ui.virtual.whitespace.wikilink
   "|" @ui.virtual.whitespace.wikilink
   (alias)? @markup.link.text)
