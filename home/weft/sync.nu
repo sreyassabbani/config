@@ -96,11 +96,6 @@ def main [mode: string = "sync"] {
   cd $env.WEFT_VAULT
   print $"--- (stamp) ($mode)"
 
-  # Until Obsidian is gone, obsidian-git still syncs while it is open.
-  if (^/usr/bin/pgrep -qx Obsidian | complete).exit_code == 0 {
-    print "Obsidian is open; leaving sync to obsidian-git"
-    return
-  }
   let git_dir = ^git rev-parse --git-dir | str trim
   let mid_merge = ["MERGE_HEAD" "rebase-merge" "rebase-apply"] | any {|f| $git_dir | path join $f | path exists }
   if $mid_merge {

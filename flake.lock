@@ -404,11 +404,11 @@
     "weft-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1795214995,
-        "narHash": "sha256-s1Qny6yWdsZDvmUqY2g1gX7PJGq6o5vUuCp36iFgZWc=",
+        "lastModified": 1795284032,
+        "narHash": "sha256-454ruNQsyAQecMvOtD69nhdeoW6vWY6eS2nicAwVofU=",
         "owner": "sreyassabbani",
         "repo": "weft",
-        "rev": "f82151b7057da7a70ed7743517a44ef34900fa7c",
+        "rev": "5e349fb9c7e24535cc3694847c89d16dd6079462",
         "type": "github"
       },
       "original": {
