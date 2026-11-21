@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   home = config.home.homeDirectory;
   vault = "${home}/workflow/thoughts";
@@ -7,23 +12,26 @@ let
   listed = "${config.xdg.stateHome}/weft-sync/listed-through";
 
   # Vault sync, replacing obsidian-git and obsidian-list-modified; see
-  # weft/sync.sh.
-  sync = pkgs.writeShellApplication {
-    name = "weft-sync";
-    # git and gpg come from Nix; ssh is left to /usr/bin, whose UseKeychain
-    # unlocks the GitHub key from launchd.
-    runtimeInputs = [
-      pkgs.git
-      pkgs.coreutils
-      pkgs.gnugrep
-      pkgs.weft
+  # weft/sync.nu.
+  sync = pkgs.writers.writeNuBin "weft-sync" {
+    makeWrapperArgs = [
+      # git and gpg come from Nix; ssh is left to /usr/bin, whose UseKeychain
+      # unlocks the GitHub key from launchd.
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [
+        pkgs.git
+        pkgs.weft
+      ])
+      "--set"
+      "WEFT_VAULT"
+      vault
+      "--set"
+      "WEFT_LISTED"
+      listed
     ];
-    text = ''
-      export WEFT_VAULT="${vault}"
-      export WEFT_LISTED="${listed}"
-    ''
-    + builtins.readFile ./weft/sync.sh;
-  };
+  } (builtins.readFile ./weft/sync.nu);
 
   # `weft` on PATH: `weft sync` runs the sync above, anything else goes to
   # weft itself. Sync stays here rather than in weft because it is this
