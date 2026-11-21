@@ -42,6 +42,24 @@ in
   home.activation.hexSync = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ -x ${bin} ]; then
       run ${sync}/bin/hex-sync || echo "hex-sync failed; run \`hex sync\` to retry" >&2
+    elif [ -d /Applications/Hex.app ]; then
+      echo "hex-sync: Hex no longer ships its CLI at ${bin}; update home/hex.nix" >&2
     fi
   '';
+
+  # Read-only check against the running Hex, which may be newer than at the
+  # last rebuild; see hex/sync.nu. Silent unless something no longer matches.
+  launchd.agents.hex-check = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "${sync}/bin/hex-sync"
+        "--check"
+      ];
+      RunAtLoad = true;
+      StartInterval = 86400;
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/hex-sync.log";
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/hex-sync.log";
+    };
+  };
 }
