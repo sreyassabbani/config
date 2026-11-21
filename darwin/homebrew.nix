@@ -10,6 +10,9 @@
       "sreyassabbani/tap/saterminal"
       "steipete/tap/spogo"
     ];
+    trust.casks = [
+      "anomalyco/tap/hex"
+    ];
   };
 
   homebrew = {
@@ -93,6 +96,7 @@
       brew "anomalyco/tap/opencode-v2", trusted: true
       brew "sreyassabbani/tap/saterminal", trusted: true
       brew "steipete/tap/spogo", trusted: true
+      cask "anomalyco/tap/hex", trusted: true
     '';
 
     # Refresh and upgrade Homebrew packages on rebuild, including casks that
