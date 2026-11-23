@@ -48,10 +48,7 @@ let
   };
 
   # Link styling in Helix; see weft/helix/README.md.
-  grammars = [
-    "wikilink"
-    "daylink"
-  ];
+  grammars = [ "daylink" ];
   grammar =
     name:
     pkgs.tree-sitter.buildGrammar {

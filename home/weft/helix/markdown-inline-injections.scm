@@ -1,18 +1,12 @@
 ; Days: the daylink grammar finds weft's `@2026.11.22` in a paragraph's
 ; plain text. Named parts (links, code, emphasis) are left out of what it
-; reads, and keep their own colors. This pattern must come before the link
-; one: the other way round, Helix drops the link injection.
+; reads, and keep their own colors.
+;
+; Links get no grammar of their own, so `[target|alias]` is not split. Helix
+; 25.07 drops one of two injections when one lies inside the other, so a
+; link injection here would cost the color of every date in the same
+; paragraph. tree-house fixed this on 2026-11-11 (b5206f0); once a Helix
+; release carries it, a link injection can come back after this pattern.
 ((inline) @injection.content
   (#set! injection.language "daylink")
   (#set! injection.include-unnamed-children))
-
-; Links: the text inside `[...]` and `[[...]]` goes to the wikilink grammar,
-; which splits it into target and alias. Helix's parser reads `[[a|b]]` as a
-; shortcut link `[a|b]` inside brackets, so one pattern covers both. Left
-; alone, as weft leaves them: footnotes (`[^1]`), `[x]`, and text with no
-; letter or digit in it.
-((shortcut_link (link_text) @injection.content)
-  (#match? @injection.content "\\w")
-  (#not-match? @injection.content "^(\\^|[xX]$)")
-  (#set! injection.language "wikilink")
-  (#set! injection.include-children))
