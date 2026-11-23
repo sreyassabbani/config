@@ -47,18 +47,24 @@ let
     '';
   };
 
-  # Wiki-link styling; see weft/wikilink/README.md.
-  wikilink = pkgs.tree-sitter.buildGrammar {
-    language = "wikilink";
-    version = "0.1.0";
-    src = ./weft/wikilink;
-  };
-  # Helix's own Markdown queries with the wiki-link additions appended: a
-  # query file in the user runtime replaces the bundled one entirely.
+  # Link styling in Helix; see weft/helix/README.md.
+  grammars = [
+    "wikilink"
+    "daylink"
+  ];
+  grammar =
+    name:
+    pkgs.tree-sitter.buildGrammar {
+      language = name;
+      version = "0.1.0";
+      src = ./weft/helix/${name};
+    };
+  # Helix's own Markdown queries with the additions appended: a query file in
+  # the user runtime replaces the bundled one entirely.
   markdownInline =
     file:
     builtins.readFile "${config.programs.helix.package.runtime}/queries/markdown.inline/${file}"
-    + builtins.readFile ./weft/wikilink/markdown-inline-${file};
+    + builtins.readFile ./weft/helix/markdown-inline-${file};
 
   agent = args: extra: {
     enable = true;
@@ -86,23 +92,27 @@ in
         ];
         "language-servers" = [ "weft" ];
       }
-      {
-        name = "wikilink";
-        scope = "source.wikilink";
-        injection-regex = "^wikilink$";
-        file-types = [ ];
-        grammar = "wikilink";
-      }
-    ];
+    ]
+    ++ map (name: {
+      inherit name;
+      scope = "source.${name}";
+      injection-regex = "^${name}$";
+      file-types = [ ];
+      grammar = name;
+    }) grammars;
     language-server.weft.command = "${pkgs.weft}/bin/weft";
   };
 
   xdg.configFile = {
-    "helix/runtime/grammars/wikilink.so".source = "${wikilink}/parser";
-    "helix/runtime/queries/wikilink/highlights.scm".source = ./weft/wikilink/queries/highlights.scm;
     "helix/runtime/queries/markdown.inline/highlights.scm".text = markdownInline "highlights.scm";
     "helix/runtime/queries/markdown.inline/injections.scm".text = markdownInline "injections.scm";
-  };
+  }
+  // lib.mergeAttrsList (
+    map (name: {
+      "helix/runtime/grammars/${name}.so".source = "${grammar name}/parser";
+      "helix/runtime/queries/${name}/highlights.scm".source = ./weft/helix/${name}/queries/highlights.scm;
+    }) grammars
+  );
 
   launchd.agents = {
     weft-sync = agent [ ] { StartInterval = 1800; };

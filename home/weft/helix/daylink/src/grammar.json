@@ -1,0 +1,59 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "daylink",
+  "rules": {
+    "text": {
+      "type": "REPEAT",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "day"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_other"
+          }
+        ]
+      }
+    },
+    "day": {
+      "type": "PATTERN",
+      "value": "@\\d{4}\\.\\d{2}\\.\\d{2}"
+    },
+    "_other": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[(\\[\"]"
+        },
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[^\\s@(\\[\"]\\S*"
+        },
+        {
+          "type": "PATTERN",
+          "value": "@\\d{4}\\.\\d{2}\\.\\d{2}(\\w|[.\\/-]\\d)\\S*"
+        }
+      ]
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}
