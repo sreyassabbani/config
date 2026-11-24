@@ -9,6 +9,10 @@
       inherits = "catppuccin_frappe";
       # Between Frappé's base (#303446) and cursor-line (#3b3f52).
       "ui.virtual.whitespace.wikilink" = "#363a4c";
+      "markup.link.text" = {
+        fg = "lavender";
+        modifiers = [ "underlined" ];
+      };
     };
 
     settings = {
