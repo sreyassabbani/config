@@ -15,10 +15,10 @@ anki-notetypes --dry-run --diff   # what would change
 anki-notetypes --restart          # quit Anki, apply, reopen (it syncs on open)
 ```
 
-Only template text and CSS change, so it reaches AnkiWeb, AnkiMobile and
-[anki-blue](../anki-blue.nix) with a normal sync. Adding or removing card
-templates or fields forces a full sync, so the script refuses; do that in Anki
-desktop first, then mirror it here. Note types not listed are left alone.
+Only template text and CSS change, so those changes reach AnkiWeb and
+AnkiMobile with a normal sync. Adding or removing card templates or fields
+forces a full sync, so the script refuses; do that in Anki desktop first,
+then mirror it here. Note types not listed are left alone.
 
 ## Layout rules
 
